@@ -1,0 +1,5 @@
+*.pdf
+*.xml
+db
+incremental_db
+.qsys_edit
