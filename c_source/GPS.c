@@ -65,7 +65,7 @@ int swapEndian(char *s)
    return val;
 }
 
-void getData(char all_data[100])
+void getData(char* all_data)
 {
    //while (!(GPS_LineStatusReg & 0x1));
    //char result = readGPS();
