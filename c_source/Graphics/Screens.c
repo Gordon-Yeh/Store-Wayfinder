@@ -15,15 +15,14 @@ void ResetScreen(void) {
 void HomeMenu(void) {
 	ResetScreen();
 	
-	FillBox(30, 789, 10, 109, BLUE, FOREST_GREEN);
-	FillBox(30, 789, 120, 229, BLUE, FOREST_GREEN);
-	FillBox(30, 789, 240, 349, BLUE, FOREST_GREEN);
-	FillBox(30, 789, 360, 469, BLUE, FOREST_GREEN);
-	
-	// Fill(31, 11, FOREST_GREEN, BLUE);
-	// Fill(31, 121, FOREST_GREEN, BLUE);
-	// Fill(31, 241, FOREST_GREEN, BLUE);
-	// Fill(31, 361, FOREST_GREEN, BLUE);
+	Box(30, 789, 10, 109, BLUE);
+	Box(30, 789, 120, 229, BLUE);
+	Box(30, 789, 240, 349, BLUE);
+	Box(30, 789, 360, 469, BLUE);
+	Fill(31, 11, FOREST_GREEN, BLUE);
+	Fill(31, 121, FOREST_GREEN, BLUE);
+	Fill(31, 241, FOREST_GREEN, BLUE);
+	Fill(31, 361, FOREST_GREEN, BLUE);
 	CenteredSentence(FONT2, 30, 789, 10, 109, WHITE, 0, "Create New Shopping List", DONT_ERASE);
 	CenteredSentence(FONT2, 30, 789, 120, 229, WHITE, 0, "Add To Shopping List", DONT_ERASE);
 	CenteredSentence(FONT2, 30, 789, 240, 349, WHITE, 0, "Go To Map", DONT_ERASE);
@@ -64,22 +63,22 @@ void SearchScreen(void) {
 	
 	//first column
 	for(i = 0; i < num_categories && i < 5; i++) {
-		FillBox(26, 277, 56+i*86, 135+i*86, BLUE, FOREST_GREEN);
-		//Fill(27, 56+i*86+1, FOREST_GREEN, BLUE);
+		Box(26, 277, 56+i*86, 135+i*86, BLUE);
+		Fill(27, 56+i*86+1, FOREST_GREEN, BLUE);
 		CenteredSentence(FONT2, 26, 277, 56+i*86, 135+i*86, WHITE, 0, categories[i], DONT_ERASE);
 	}
 	
 	//second column
 	for(i = 0; i < (num_categories - 5) && i < 5; i++) {
-		FillBox(284, 535, 56+i*86, 135+i*86, BLUE, FOREST_GREEN);
-		//Fill(285, 56+i*86+1, FOREST_GREEN, BLUE);
+		Box(284, 535, 56+i*86, 135+i*86, BLUE);
+		Fill(285, 56+i*86+1, FOREST_GREEN, BLUE);
 		CenteredSentence(FONT2, 284, 535, 56+i*86, 135+i*86, WHITE, 0, categories[i+5], DONT_ERASE);
 	}
 	
 	//third column
 	for(i = 0; i < (num_categories - 10) && i < 5; i++) {
-		FillBox(542, 793, 56+i*86, 135+i*86, BLUE, FOREST_GREEN);
-		//Fill(543, 56+i*86+1, FOREST_GREEN, BLUE);
+		Box(542, 793, 56+i*86, 135+i*86, BLUE);
+		Fill(543, 56+i*86+1, FOREST_GREEN, BLUE);
 		CenteredSentence(FONT2, 542, 793, 56+i*86, 135+i*86, WHITE, 0, categories[i+10], DONT_ERASE);
 	}
 }

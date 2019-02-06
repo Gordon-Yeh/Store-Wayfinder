@@ -27,7 +27,6 @@
 #define DrawVLine		2
 #define DrawLine		3
 #define ClearScreen 	4
-#define FillBoxx		5
 
 #define	PutAPixel		0xA
 #define	GetAPixel		0xB
@@ -108,6 +107,17 @@ void VLine(int x1, int y1, int y2, int Colour)
 	GraphicsCommandReg = DrawVLine;
 }
 
+/*********************************************************************************************
+*********************************************************************************************/
+
+void Box(int x1, int x2, int y1, int y2, int Colour)
+{
+	HLine(x1, y1, x2, Colour);
+	VLine(x2, y1, y2, Colour);
+	VLine(x1, y1, y2, Colour);
+	HLine(x1, y2, x2, Colour);
+}
+
 /*******************************************************************************
 *******************************************************************************/
 
@@ -132,40 +142,4 @@ void Clear(int Colour)
 
 	GraphicsColourReg = Colour;
 	GraphicsCommandReg = ClearScreen;
-}
-
-/*******************************************************************************
-** FILLS INSIDE THE COORDINATES (DOES NOT INCLUDE THE COORDINATES THEMSELVES)
-*******************************************************************************/
-
-void FillBox(int x1, int x2, int y1, int y2, int Colour)
-{
-	WAIT_FOR_GRAPHICS;
-
-	GraphicsX1Reg = x1;
-	GraphicsX2Reg = x2;
-	GraphicsY1Reg = y1;
-	GraphicsY2Reg = y2;	
-	GraphicsColourReg = Colour;
-	GraphicsCommandReg = FillBoxx;
-}
-
-/*********************************************************************************************
-*********************************************************************************************/
-
-void Box(int x1, int x2, int y1, int y2, int Colour)
-{
-	HLine(x1, y1, x2, Colour);
-	VLine(x2, y1, y2, Colour);
-	VLine(x1, y1, y2, Colour);
-	HLine(x1, y2, x2, Colour);
-}
-
-/*********************************************************************************************
-*********************************************************************************************/
-
-void BorderedBox(int x1, int x2, int y1, int y2, int Colour, int FillColour)
-{
-	Box(x1, x2, y1, y2, Colour);
-	FillBox(x1, x2, y1, y2, FillColour);
 }
