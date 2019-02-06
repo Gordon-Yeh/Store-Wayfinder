@@ -97,7 +97,7 @@ void GPSFlush(void)
 }
 
 
-int main(void)
+int mainGPS(void)
 {
    Init_GPS();
 
