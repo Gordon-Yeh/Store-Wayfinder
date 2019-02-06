@@ -7,7 +7,8 @@ module SerialIODecoder (
 		output reg RS232_Port_Enable,
 		output reg GPS_Port_Enable,
 		output reg Bluetooth_Port_Enable,
-		output reg TouchScreen_Port_Enable
+		output reg TouchScreen_Port_Enable,
+		output reg Wifi_Port_Enable
 	);
 
 	always@(Address, IOSelect_H, ByteSelect_L) begin
@@ -20,6 +21,7 @@ module SerialIODecoder (
 		GPS_Port_Enable <= 0 ;
 		Bluetooth_Port_Enable <= 0 ;
 		TouchScreen_Port_Enable <= 0 ;
+		Wifi_Port_Enable <= 0 ;
 		
 // IOSelect_H is driven logic 1 whenever the CPU outputs an address in the range A31:A0 = hex [FF21_0000] to [FF21_FFFF]
 // that is, IOSelect_H is driven to logic 1 for all addresses in range [FF21_XXXX]. 
@@ -53,6 +55,10 @@ module SerialIODecoder (
 // TODO – add your own Verilog code to produce an active high enable for the TouchScreen UART
 	if((IOSelect_H == 1) && (Address[15:4] == 12'h023) && ByteSelect_L == 0) 		// address = 0xFF21_0230 - hex FF21_020F
 			TouchScreen_Port_Enable <= 1 ;		// enable the 4th UART device
+	
+//active high enable for the Wifi UART
+	if((IOSelect_H == 1) && (Address[15:4] == 12'h024) && ByteSelect_L == 0) 		// address = 0xFF21_0240 - hex FF21_020F
+			Wifi_Port_Enable <= 1 ;		// enable the 5th UART device
 
 	end
 endmodule
