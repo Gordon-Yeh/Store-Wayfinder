@@ -117,6 +117,7 @@ module  GraphicsController_Verilog (
 	parameter ClearScreen = 8'h11;
 	parameter ClearScreen1 = 8'h12;
 	parameter FillBox = 8'h13;
+	parameter FillBox1 = 8'h14;
 	
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	// Commands values that can be written to command register by CPU to get graphics controller to draw a shape
@@ -474,6 +475,22 @@ module  GraphicsController_Verilog (
 					tempY1 <= tempY1 + 16'd1;
 				end
 			end
+			
+			//FILLBOX SEQUENTIAL
+			FillBox: begin
+				tempX1 <= X1 + 16'd1;
+				tempX2 <= X2 - 16'd1;
+				tempY1 <= Y1 + 16'd1;
+				tempY2 <= Y2 - 16'd1;
+			end
+			FillBox1: begin
+				if(tempX1 < tempX2)
+					tempX1 <= tempX1 + 16'd1;
+				else begin
+					tempX1 <= X1 + 16'd1;
+					tempY1 <= tempY1 + 16'd1;
+				end
+			end
 		endcase
 	end
 	
@@ -776,6 +793,30 @@ module  GraphicsController_Verilog (
 					Sig_LDS_Out_L 	<= 0;
 				end
 				NextState <= ClearScreen1;
+			end
+			else
+				NextState <= Idle;
+		end
+		
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		else if(CurrentState == FillBox) begin
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////		
+			NextState <= FillBox1;
+		end	
+		
+		else if(CurrentState == FillBox1) begin
+			if(tempY1 <= tempY2) begin
+				Sig_AddressOut 	<= {tempY1[8:0], tempX1[9:1]};
+				Sig_RW_Out		<= 0;
+				if(tempX1[0] == 1'b0) begin									// if the address/pixel is an even numbered one
+					Sig_UDS_Out_L 	<= 0;								// enable write to upper half of Sram data bus
+					Sig_LDS_Out_L 	<= 1;
+				end
+				else begin
+					Sig_UDS_Out_L 	<= 1;
+					Sig_LDS_Out_L 	<= 0;
+				end
+				NextState <= FillBox1;
 			end
 			else
 				NextState <= Idle;
