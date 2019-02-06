@@ -42,6 +42,8 @@ module  GraphicsController_Verilog (
 
 	reg signed [15:0] X1, Y1, X2, Y2, Colour, BackGroundColour, Command;			// registers
 	reg signed [15:0] Colour_Latch;									// holds data read from a pixel
+	reg signed [15:0] tempX1, tempX2, tempY1, tempY2, 
+		dx, dy, s1, s2, i, temp, interchange, error, X2MinusX1, Y2MinusY1;
 
 	// signals to control/select the registers above
 	reg  	X1_Select_H,
@@ -97,13 +99,24 @@ module  GraphicsController_Verilog (
 	parameter Idle	= 8'h00;										// main waiting State
 	parameter ProcessCommand = 8'h01;						// State is figure out command
 	parameter DrawHLine = 8'h02;			 	 				// State for drawing a Horizontal line
-	parameter DrawVline = 8'h03;			 	 				// State for drawing a Vertical line
+	parameter DrawVLine = 8'h03;			 	 				// State for drawing a Vertical line
 	parameter DrawLine = 8'h04;				 	 			// State for drawing any line
 	parameter DrawPixel = 8'h05;							 	// State for drawing a pixel
 	parameter ReadPixel = 8'h06;							 	// State for reading a pixel
 	parameter ReadPixel1 = 8'h07;							 	// State for reading a pixel
 	parameter ReadPixel2 = 8'h08;							 	// State for reading a pixel
 	parameter PalletteReProgram = 8'h09;					// State for programming a pallette colour
+	
+	parameter DrawHLine1 = 8'h0a;			 	 				// State for drawing a Horizontal line
+	parameter DrawVLine1 = 8'h0b;			 	 				// State for drawing a Vertical line
+	parameter DrawLine1 = 8'h0c;			 	 				// State for drawing a line
+	parameter DrawLine2 = 8'h0d;
+	parameter DrawLine3 = 8'h0e;
+	parameter DrawLine4 = 8'h0f;
+	parameter DrawLine5 = 8'h10;
+	parameter ClearScreen = 8'h11;
+	parameter ClearScreen1 = 8'h12;
+	parameter FillBox = 8'h13;
 	
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	// Commands values that can be written to command register by CPU to get graphics controller to draw a shape
@@ -112,10 +125,11 @@ module  GraphicsController_Verilog (
 	parameter Hline = 16'h0001;							 	// command is draw Horizontal line
 	parameter Vline = 16'h0002;								// command is draw Vertical line
 	parameter ALine = 16'h0003;								// command is draw any line
+	parameter ClearScr = 16'h0004;
+	parameter FillB = 16'h0005;
 	parameter PutPixel = 16'h000a;							// command to draw a pixel
 	parameter GetPixel = 16'h000b;							// command to read a pixel
 	parameter ProgramPallette = 16'h0010;					// command is program one of the 256 pallettes with a new RGB value
-	
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	// Secondary address decoder within chip
@@ -217,7 +231,7 @@ module  GraphicsController_Verilog (
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	always@(posedge Clk) begin	
-		if(Reset_L == 0) 
+		if(Reset_L == 0)
 			Y1 <= 16'h0 ;			// for SIMULATION ONLY
 		else begin
 			if(Y1_Select_H == 1) begin
@@ -355,6 +369,114 @@ module  GraphicsController_Verilog (
 		end 
 	end
 	
+	
+	always@(posedge Clk) begin
+		case(CurrentState)
+			//HORIZONTAL LINE SEQUENTIAL
+			DrawHLine: begin
+				tempX1 <= X1 > X2 ? X2 : X1;
+				tempX2 <= X1 > X2 ? X1 : X2;
+			end
+			DrawHLine1: begin
+				if(tempX1 <= tempX2) begin
+					if(tempX1[0] == 1'b1) begin	
+						tempX1 <= tempX1 + 16'd1;
+					end
+					else if(tempX1 == tempX2) begin
+						tempX1 <= tempX1 + 16'd1;
+					end
+					else begin
+						tempX1 <= tempX1 + 16'd2;
+					end
+				end
+			end
+
+			
+			//VERTICAL LINE SEQUENTIAL
+			DrawVLine: begin
+				tempY1 <= Y1 > Y2 ? Y2 : Y1;
+				tempY2 <= Y1 > Y2 ? Y1 : Y2;
+			end
+			DrawVLine1: begin
+				tempY1 <= tempY1 + 16'd1;
+			end
+
+			
+			//LINE SEQUENTIAL
+			DrawLine: begin
+				tempX1 <= X1;
+				tempY1 <= Y1;
+
+				// take abs of X2MinusX1 and Y2MinusY1
+				dx <= (X2MinusX1 < 0) ? (-X2MinusX1) : (X2MinusX1) ;
+				dy <= (Y2MinusY1 < 0) ? (-Y2MinusY1) : (Y2MinusY1) ;
+
+				// calculate s1= sign(X2 - X1)
+				if (X2MinusX1 < 0) 
+					s1 <= -16'd1;			// s1 = -1
+				else if (X2MinusX1 == 0) 
+					s1 <= 16'd0;			// s1 = 0
+				else
+					s1 <= 16'd1;			// s1 = 1
+
+				if (Y2MinusY1 < 0) 
+					s2 <= -16'd1;			// s1 = -1
+				else if (Y2MinusY1 == 0) 
+					s2 <= 16'd0;			// s1 = 0
+				else
+					s2 <= 16'd1;			// s1 = 1
+					
+				interchange <= 16'd0; 			// interchange = 0		
+			end
+			DrawLine1: begin
+				if(dy > dx) begin
+					dx <= dy;
+					dy <= dx;
+					interchange <= 16'd1;
+				end
+			end
+			DrawLine2: begin
+				error <= (dy << 1) - dx;    // error = (2 * dy) - dx
+				i <= 16'd1;
+			end
+			//DrawLine3: ;
+			DrawLine4: begin
+				if(error >= 0) begin
+					if(interchange == 16'd1)
+						tempX1 <= tempX1 + s1;
+					else
+						tempY1 <= tempY1 + s2;
+
+					error <= error - (dx << 1);    // error = error - (dx * 2)
+				end
+			end
+			DrawLine5: begin
+				if(interchange == 16'd1)
+					tempY1 <= tempY1 + s2;
+				else
+					tempX1 <= tempX1 + s1;
+
+				error <= error + (dy << 1);    // error = error + (dy * 2)
+				i <= i + 16'd1;
+			end
+			
+			
+			//CLEARSCREEN SEQUENTIAL
+			ClearScreen: begin
+				tempX1 <= 20;
+				tempY1 <= 0;
+			end
+			ClearScreen1: begin
+				if(tempX1 < 799)
+					tempX1 <= tempX1 + 16'd1;
+				else begin
+					tempX1 <= 20;
+					tempY1 <= tempY1 + 16'd1;
+				end
+			end
+		endcase
+	end
+	
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // next State and output logic
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////	
@@ -380,7 +502,11 @@ module  GraphicsController_Verilog (
 		Sig_ColourPalletteAddr			<= 0;
 		Sig_ColourPalletteData			<= 0;
 		Sig_ColourPallette_WE_H			<= 0; 
-
+		
+						
+		X2MinusX1 <= X2 - X1;			
+		Y2MinusY1 <= Y2 - Y1;	
+		
 		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		// IMPORTANT we have to define what the default NEXT state will be. In this case we the state machine
 		// will return to the IDLE state unless we override this with a different one
@@ -419,9 +545,13 @@ module  GraphicsController_Verilog (
 			else if(Command == Hline) 
 				NextState <= DrawHLine;	
 			else if(Command == Vline) 
-				NextState <= DrawVline;
+				NextState <= DrawVLine;
 			else if(Command == ALine) 
-				NextState <= ALine;	
+				NextState <= DrawLine;	
+			else if(Command == ClearScr)
+				NextState <= ClearScreen;
+			else if(Command == FillB)
+				NextState <= FillBox;
 				
 			// add other code to process any new commands here e.g. draw a circle if you decide to implement that
 			// or draw a rectangle etc
@@ -520,22 +650,135 @@ module  GraphicsController_Verilog (
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		else if(CurrentState == DrawHLine) begin
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-			// TODO in your project
-			NextState <= Idle;
+			//NOTE: THIS IS COMBINATIONAL
+			//Get values from sequential block above
+			NextState <= DrawHLine1;
+			
+		end
+		
+		else if(CurrentState == DrawHLine1) begin
+			if(tempX1 <= tempX2) begin
+				Sig_AddressOut <= {Y1[8:0], tempX1[9:1]};
+				Sig_RW_Out		<= 0;
+				if(tempX1[0] == 1'b1) begin	
+					Sig_UDS_Out_L 	<= 1;		
+					Sig_LDS_Out_L 	<= 0;		// enable write to lower half of Sram data bus	
+					//tempX1 <= tempX1 + 16'd1;
+				end
+				else if(tempX1 == tempX2) begin
+					Sig_UDS_Out_L 	<= 0;		// enable write to upper half of Sram data bus	
+					Sig_LDS_Out_L 	<= 1;		
+					//tempX1 <= tempX1 + 16'd1;
+				end
+				else begin
+					Sig_UDS_Out_L 	<= 0;		// enable write to both halves of Sram data bus
+					Sig_LDS_Out_L 	<= 0;
+					//tempX1 <= tempX1 + 16'd2;
+				end
+				NextState <= DrawHLine1;
+			end
+			else
+				NextState <= Idle;
 		end
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-		else if(CurrentState == DrawVline) begin
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////		
-			// TODO in your project
-			NextState <= Idle;
+		else if(CurrentState == DrawVLine) begin
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+			NextState <= DrawVLine1;	
+		end
+		
+		else if(CurrentState == DrawVLine1) begin
+			if(tempY1 <= tempY2) begin
+				Sig_AddressOut <= {tempY1[8:0], X1[9:1]};
+				Sig_RW_Out		<= 0;
+				if(X1[0] == 1'b0) begin									// if the address/pixel is an even numbered one
+					Sig_UDS_Out_L 	<= 0;								// enable write to upper half of Sram data bus
+					Sig_LDS_Out_L 	<= 1;
+				end
+				else begin
+					Sig_UDS_Out_L 	<= 1;
+					Sig_LDS_Out_L 	<= 0;								// else write to lower half of Sram data bus
+				end
+				//tempY1 <= tempY1 + 16'd1;
+				NextState <= DrawVLine1;
+			end
+			else
+				NextState <= Idle;
+			
 		end
 			
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		else if(CurrentState == DrawLine) begin
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////		
-			// TODO in your project
-			NextState <= Idle;			
+			X2MinusX1 <= X2 - X1;			
+			Y2MinusY1 <= Y2 - Y1;
+			if(X1 == X2 && Y1 == Y2)
+				NextState <= Idle;		
+			else
+				NextState <= DrawLine1;	
+		end
+		
+		else if(CurrentState == DrawLine1) begin
+			NextState <= DrawLine2;
+		end
+		
+		else if(CurrentState == DrawLine2) begin
+			NextState <= DrawLine3;
+		end
+		
+		else if(CurrentState == DrawLine3) begin		
+			if(i <= dx) begin	
+				Sig_AddressOut 	<= {tempY1[8:0], tempX1[9:1]};
+				Sig_RW_Out			<= 0;
+					
+				if(tempX1[0] == 1'b0) begin									// if the address/pixel is an even numbered one
+					Sig_UDS_Out_L 	<= 0;								// enable write to upper half of Sram data bus
+					Sig_LDS_Out_L 	<= 1;
+				end
+				else begin
+					Sig_UDS_Out_L 	<= 1;
+					Sig_LDS_Out_L 	<= 0;
+				end
+				
+				NextState <= DrawLine4;
+			end
+			else
+				NextState <= Idle;
+		end
+		
+		else if(CurrentState == DrawLine4) begin
+			if(error >= 0)
+				NextState <= DrawLine4;
+			else
+				NextState <= DrawLine5;
+		end
+		
+		else if(CurrentState == DrawLine5) begin
+			NextState <= DrawLine3;
+		end
+		
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		else if(CurrentState == ClearScreen) begin
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////		
+			NextState <= ClearScreen1;
+		end	
+		
+		else if(CurrentState == ClearScreen1) begin
+			if(tempY1 <= 479) begin
+				Sig_AddressOut 	<= {tempY1[8:0], tempX1[9:1]};
+				Sig_RW_Out		<= 0;
+				if(tempX1[0] == 1'b0) begin									// if the address/pixel is an even numbered one
+					Sig_UDS_Out_L 	<= 0;								// enable write to upper half of Sram data bus
+					Sig_LDS_Out_L 	<= 1;
+				end
+				else begin
+					Sig_UDS_Out_L 	<= 1;
+					Sig_LDS_Out_L 	<= 0;
+				end
+				NextState <= ClearScreen1;
+			end
+			else
+				NextState <= Idle;
 		end
 	end
 endmodule
