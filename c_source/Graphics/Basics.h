@@ -7,6 +7,7 @@ void ProgramPalette(int PaletteNumber, int RGB);
 void HLine(int x1, int y1, int x2, int Colour);
 void VLine(int x1, int y1, int y2, int Colour);
 void Box(int x1, int x2, int y1, int y2, int Colour);
+void FillBox(int x1, int x2
 void Line(int x1, int y1, int x2, int y2, int Colour);
 void Clear(int Colour);
 

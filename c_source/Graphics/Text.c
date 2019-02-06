@@ -120,6 +120,7 @@ void Font2(int x, int y, int colour, int backgroundcolour, int c, int Erase)
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 void Font3(int x, int y, int colour, int c)
 {
 	int height, width, bitmask;
@@ -178,6 +179,28 @@ void Font3(int x, int y, int colour, int backgroundcolour, int c, int Erase)
 				BitMask = BitMask >> 1 ;
 			}
 			
+>>>>>>> Graphics
+=======
+void Font3(int x, int y, int colour, int c)
+{
+	int height, width, bitmask;
+	unsigned char pixels;
+	for(height = 0; height < 27; height++) {
+		
+		bitmask = 128;
+		pixels = Font16x27[height*2];
+		for(width = 0; width < 8, width++) {
+			if((pixels & bitmask))
+				WriteAPixel(x+width, y+height, colour);
+			bitmask = bitmask >> 1;
+		}
+		
+		bitmask = 128;
+		pixels = Font16x27[height*2+1];
+		for(width = 8; width < 16, width++) {
+			if((pixels & bitmask))
+				WriteAPixel(x+width, y+height, colour);
+			bitmask = bitmask >> 1;
 >>>>>>> Graphics
 		}
 	}
