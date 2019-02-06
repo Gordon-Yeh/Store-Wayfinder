@@ -5,8 +5,8 @@ JedecChain;
 
 	P ActionCode(Ign)
 		Device PartName(SOCVHPS) MfrSpec(OpMask(0));
-	P ActionCode(Cfg)
-		Device PartName(5CSEMA5F31) Path("C:/Users/Gordon/Desktop/cpen-391-module-1/quartus/") File("CPEN391_Project.sof") MfrSpec(OpMask(1));
+	P ActionCode(Ign)
+		Device PartName(5CSEMA5) MfrSpec(OpMask(0));
 
 ChainEnd;
 

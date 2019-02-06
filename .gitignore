@@ -3,3 +3,8 @@
 db
 incremental_db
 .qsys_edit
+
+# modified when re-opening quartus 
+*.cdf
+*.qws
+*.done
