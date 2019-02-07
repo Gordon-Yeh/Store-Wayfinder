@@ -166,6 +166,6 @@ void Box(int x1, int x2, int y1, int y2, int Colour)
 
 void BorderedBox(int x1, int x2, int y1, int y2, int Colour, int FillColour)
 {
-	Box(x1, x2, y1, y2, Colour);
 	FillBox(x1, x2, y1, y2, FillColour);
+	Box(x1, x2, y1, y2, Colour);
 }

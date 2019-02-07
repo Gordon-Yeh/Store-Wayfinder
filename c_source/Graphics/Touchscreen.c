@@ -104,8 +104,8 @@ Point GetRelease(void) {
 
 Point ScalePoint(UnscaledPoint unsca_p) {
 	Point p;
-	p.x = unsca_p.x*799/4095;
-	p.y = unsca_p.y*479/4095;
+	p.x = (unsca_p.x) * 799/4000;
+	p.y = (unsca_p.y - 120) *479/3900;
 	return p;
 }
 

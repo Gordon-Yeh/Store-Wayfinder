@@ -89,7 +89,6 @@ void Font2(int x, int y, int colour, int backgroundcolour, int c, int Erase)
 	register char 	theColour = colour  ;
 	register int 	BitMask,
 					theCharacter = c,
-					j,
 					theRow, theColumn;
 
 
@@ -129,16 +128,16 @@ void Font3(int x, int y, int colour, int c)
 		
 		bitmask = 128;
 		pixels = Font16x27[height*2];
-		for(width = 0; width < 8, width++) {
-			if((pixels & bitmask))
+		for(width = 0; width < 8; width++) {
+			if(pixels & bitmask)
 				WriteAPixel(x+width, y+height, colour);
 			bitmask = bitmask >> 1;
 		}
 		
 		bitmask = 128;
 		pixels = Font16x27[height*2+1];
-		for(width = 8; width < 16, width++) {
-			if((pixels & bitmask))
+		for(width = 8; width < 16; width++) {
+			if(pixels & bitmask)
 				WriteAPixel(x+width, y+height, colour);
 			bitmask = bitmask >> 1;
 =======
