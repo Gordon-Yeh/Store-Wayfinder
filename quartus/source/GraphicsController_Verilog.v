@@ -823,6 +823,3 @@ module  GraphicsController_Verilog (
 		end
 	end
 endmodule
-
-	
-	

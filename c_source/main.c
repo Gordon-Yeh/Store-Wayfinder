@@ -12,13 +12,8 @@ int main(void)
     printf("Starting...\n");
 	Init_Touch();
 	
-	//FillBox(30, 789, 360, 469, WHITE);
 	HomeMenu();
-	//Font3(20, 0, RED, (int)'A');
 	
     printf("Done...\n");
     return 0 ;
 }
-
-
-
