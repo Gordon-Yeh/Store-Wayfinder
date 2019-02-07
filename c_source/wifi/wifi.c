@@ -8,7 +8,6 @@
 #include <stdlib.h>
 #include <time.h>
 #include <string.h>
-#include "wifi.h"
 
 #define Wifi_ReceiverFifo (*(volatile unsigned char *)(0xFF210240))
 #define Wifi_TransmitterFifo (*(volatile unsigned char *)(0xFF210240))
@@ -32,6 +31,7 @@ void Init_Wifi(void)
 	  Wifi_DivisorLatchMSB = 0;
 
 	//set bit 7 of Line Control Register back to 0 and
+	  Wifi_LineControlReg = Wifi_LineControlReg & 0x7F;
 	//program other bits in that reg for 8 bit data, 1, stop bit, no parity etc
 	  Wifi_LineControlReg = 0x3;
 
@@ -47,23 +47,15 @@ char putcharWifi(char input)
 {
  // wait for Transmitter Holding Register bit (5) of line status register to be '1'
     while (!(Wifi_LineStatusReg && 0x20));
- // indicating we can write to the device
-
- // write character to Transmitter fifo register
     Wifi_TransmitterFifo = input;
- // return the character we printed
-    return input; //or return reg value?
+    return input;
 }
 
-unsigned char getcharWifi(void)
+unsigned char getcharWifi( void )
 {
  // wait for Data Ready bit (0) of line status register to be '1'
     while (!(Wifi_LineStatusReg & 0x1));
- // read new character from ReceiverFiFo register
     return Wifi_ReceiverFifo;
- // return new character
-
-
 }
 
 // the following function polls the UART to determine if any character
@@ -84,14 +76,11 @@ void saveAndPrintBuffer(void)
 {
 	 char Buffer[100];
 	 int i = 0;
-
-	 while (Wifi_LineStatusReg & 0x1) {
+	 while (Wifi_LineStatusReg & 0x1){
 	        Buffer[i] = Wifi_ReceiverFifo;
 	        //printf("%c\n", Buffer[i]); //DEBUG
 	        i++;
-	        //reallocate buffer mem based on i
 	 }
-
 	 printf("%s\n", Buffer);
 
 	 return;
@@ -103,13 +92,11 @@ void saveAndPrintBuffer(void)
 //
 void WifiFlush(void)
 {
-   // while bit 0 of Line Status Register == ï¿½1ï¿½
-   while (Wifi_LineStatusReg & 0x1) {
-      Wifi_ReceiverFifo;
-   }
-
-   // read unwanted char out of fifo receiver buffer
-   return; // no more characters so return
+ // while bit 0 of Line Status Register == ‘1’
+    while (Wifi_LineStatusReg & 0x1){
+        Wifi_ReceiverFifo;
+    }
+    return;
 }
 
 void delay(double number_of_seconds)
@@ -121,91 +108,48 @@ void delay(double number_of_seconds)
     clock_t start_time = clock();
 
     // looping till required time is not achieved
-    while (clock() < start_time + milli_seconds);
+    while (clock() < start_time + milli_seconds)
+        ;
 }
 
-void WifiSendLine(char* message)
-{
-	for (int i = 0; i < strlen(message); i++) {
-			int c = putcharWifi(message[i]);
+void WifiSendLine(char* message){
+	for(int i = 0; i < strlen(message); i ++){
+			char c = putcharWifi(message[i]);
 			delay(0.01);
 	}
 }
 
-int testWifi(void){
+int main (void){
 
-   Init_Wifi();
-   //WifiFlush();
-   saveAndPrintBuffer();
+	   Init_Wifi();
+	   WifiFlush();
 
-   //Test_Wifi();
-   char EndLine[2] = "\r\n" ;
-   char StartFile[35] = "dofile(\"send_text_message.lua\")\r\n";
-//      char StartFile1[15] = "dofile(\"send_te";
-//      char StartFile2[14] = "xt_message.lua";
-//      char StartFile3[7] = "\")\r\n";
-//      char StartFile4[2] = {'\"','\0'};
-//      char StartFile5[3] = ")\n";
-   char CheckWifi[14] = "check_wifi()\r\n";
-
-      //DEBUG
-//
-//      WifiSendLine("This line is over 16 long");
-//      delay(1.5);
-//      saveAndPrintBuffer();
-//
-//      WifiSendLine("abcdefghijklmnopqrstuvwxyz");
-//	  delay(1.0);
-//	  saveAndPrintBuffer();
+	   char EndLine[2] = "\r\n" ;
+	   char StartFile[35] = "dofile(\"send_text_message.lua\")\r\n";
+	   char CheckWifi[14] = "check_wifi()\r\n";
 
 
+	  //send new line characters to get wifi dongle to lock onto baud rate
       WifiSendLine(EndLine);
-      delay(1.0);
-      saveAndPrintBuffer();
-      WifiSendLine(EndLine);
-      delay(1.0);
-      saveAndPrintBuffer();
-      WifiSendLine(EndLine);
-      delay(1.0);
-      saveAndPrintBuffer();
-      WifiSendLine(EndLine);
-      delay(1.0);
-      saveAndPrintBuffer();
+	  saveAndPrintBuffer();
+	  delay(0.5);
+	  WifiSendLine(EndLine);
+	  saveAndPrintBuffer();
+	  delay(0.5);
+	  WifiSendLine(EndLine);
+	  saveAndPrintBuffer();
+	  delay(0.5);
 
+	  //open wifi file and execute send msg function
       WifiSendLine(StartFile);
-//      WifiSendLine(StartFile1);
-//      saveAndPrintBuffer();
-//      WifiSendLine(StartFile2);
-//      saveAndPrintBuffer();
-//      WifiSendLine(StartFile3);
-      //WifiSendLine(StartFile4);
-      //WifiSendLine(StartFile5);
-      delay(2);
       saveAndPrintBuffer();
-      //WifiSendLine("check_wifi()\n");
+      delay(0.5);
       WifiSendLine(CheckWifi);
-      delay(2);
       saveAndPrintBuffer();
+      delay(0.5);
 
-/*
-   int c = 64;
+      WifiFlush();
 
-   putcharWifi(c);
-
-   if (WifiTestForReceivedData()){
-      if (getcharWifi() == c){
-         printf("passed test!");
-      } else {
-         printf("failed test :/");
-      }
-
-   } else {
-      printf("nothing to read");
-   }
-*/
-
-   WifiFlush();
-
-   return 0;
+      return 0;
 
 }
