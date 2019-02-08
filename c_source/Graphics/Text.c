@@ -9,7 +9,7 @@
 *************************************************************************************************/
 #include <string.h>
 
-#include "Basics.h"
+#include "draw/draw.h"
 #include "Defines.h"
 #include "Text.h"
 
@@ -57,7 +57,7 @@ void Font1(int x, int y, int fontcolour, int backgroundcolour, int c, int Erase)
 
 // if a pixel in the character display it
 				if((pixels & BitMask))
-					WriteAPixel(theX+column, theY+row, theColour) ;
+					draw_pixel(theX+column, theY+row, theColour) ;
 
 				else {
 					if(Erase == TRUE)
@@ -65,7 +65,7 @@ void Font1(int x, int y, int fontcolour, int backgroundcolour, int c, int Erase)
 // if pixel is part of background (not part of character)
 // erase the background to value of variable BackGroundColour
 
-						WriteAPixel(theX+column, theY+row, backgroundcolour) ;
+						draw_pixel(theX+column, theY+row, backgroundcolour) ;
 				}
 				BitMask = BitMask >> 1 ;
 			}
@@ -105,10 +105,10 @@ void Font2(int x, int y, int colour, int backgroundcolour, int c, int Erase)
 			BitMask = 512 ;							   											// set of hex 200 i.e. bit 7-0 = 0010 0000 0000
 			for(column = 0; column < theColumn;   )  	{
 				if((pixels & BitMask))														// if valid pixel, then write it
-					WriteAPixel(theX+column, theY+row, theColour) ;
+					draw_pixel(theX+column, theY+row, theColour) ;
 				else {																		// if not a valid pixel, do we erase or leave it along (no erase)
 					if(Erase == TRUE)
-						WriteAPixel(theX+column, theY+row, backgroundcolour) ;
+						draw_pixel(theX+column, theY+row, backgroundcolour) ;
 					// else leave it alone
 				}
 					column ++ ;
@@ -128,7 +128,7 @@ void Font3(int x, int y, int colour, int c)
 		pixels = Font16x27[height*2];
 		for(width = 0; width < 8; width++) {
 			if(pixels & bitmask)
-				WriteAPixel(x+width, y+height, colour);
+				draw_pixel(x+width, y+height, colour);
 			bitmask = bitmask >> 1;
 		}
 		
@@ -136,7 +136,7 @@ void Font3(int x, int y, int colour, int c)
 		pixels = Font16x27[height*2+1];
 		for(width = 8; width < 16; width++) {
 			if(pixels & bitmask)
-				WriteAPixel(x+width, y+height, colour);
+				draw_pixel(x+width, y+height, colour);
 			bitmask = bitmask >> 1;
 		}
 	}

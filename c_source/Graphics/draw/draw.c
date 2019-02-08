@@ -1,4 +1,6 @@
 #include <stdio.h>
+#include "../Colours.h"
+#include "draw.h"
 
 //NOTE: (20, 0) is top left, (799, 479) is bottom right
 // graphics register addresses
@@ -17,17 +19,16 @@
 ***********************************************************************************************/
 #define WAIT_FOR_GRAPHICS		while((GraphicsStatusReg & 0x0001) != 0x0001);
 
-#include "Colours.h"
 
 // #defined constants representing values we write to the graphics 'command' register to get
 // it to draw something. You will add more values as you add hardware to the graphics chip
-// Note DrawHLine, DrawVLine and DrawLine at the moment do nothing - you will modify these
+// Note Drawdraw_h_line, Drawdraw_v_line and DrawLine at the moment do nothing - you will modify these
 
-#define DrawHLine		1
-#define DrawVLine		2
-#define DrawLine		3
-#define ClearScreen 	4
-#define FillBoxx		5
+#define DRAW_H_LINE		1
+#define DRAW_V_LINE		2
+#define DRAW_LINE		3
+#define CLEAR_SCREEN 	4
+#define FILL      		5
 
 #define	PutAPixel		0xA
 #define	GetAPixel		0xB
@@ -37,7 +38,7 @@
 * This function writes a single pixel to the x,y coords specified using the specified colour
 * Note colour is a byte and represents a palette number (0-255) not a 24 bit RGB value
 ********************************************************************************************/
-void WriteAPixel(int x, int y, int Colour)
+void draw_pixel(int x, int y, int Colour)
 {
 	WAIT_FOR_GRAPHICS;				// is graphics ready for new command
 
@@ -52,7 +53,7 @@ void WriteAPixel(int x, int y, int Colour)
 * Note returned colour is a byte and represents a palette number (0-255) not a 24 bit RGB value
 *********************************************************************************************/
 
-int ReadAPixel(int x, int y)
+int read_pixel(int x, int y)
 {
 	WAIT_FOR_GRAPHICS;			// is graphics ready for new command
 
@@ -61,7 +62,7 @@ int ReadAPixel(int x, int y)
 	GraphicsCommandReg = GetAPixel;		// give graphics a "get pixel" command
 
 	WAIT_FOR_GRAPHICS;			// is graphics done reading pixel
-	return (int)(GraphicsColourReg) ;	// return the palette number (colour)
+	return (int) (GraphicsColourReg);	// return the palette number (colour)
 }
 
 
@@ -75,7 +76,7 @@ void ProgramPalette(int PaletteNumber, int RGB)
 {
     WAIT_FOR_GRAPHICS;
     GraphicsColourReg = PaletteNumber;
-    GraphicsX1Reg = RGB >> 16   ;        // program red value in ls.8 bit of X1 reg
+    GraphicsX1Reg = RGB >> 16;        // program red value in ls.8 bit of X1 reg
     GraphicsY1Reg = RGB ;                // program green and blue into ls 16 bit of Y1 reg
     GraphicsCommandReg = ProgramPaletteColour; // issue command
 }
@@ -83,7 +84,7 @@ void ProgramPalette(int PaletteNumber, int RGB)
 /********************************************************************************************* This function draw a horizontal line, 1 pixel at a time starting at the x,y coords specified
 *********************************************************************************************/
 
-void HLine(int x1, int y1, int x2, int Colour)
+void draw_h_line(int x1, int y1, int x2, int Colour)
 {
 	WAIT_FOR_GRAPHICS;
 
@@ -91,13 +92,13 @@ void HLine(int x1, int y1, int x2, int Colour)
 	GraphicsY1Reg = y1;
 	GraphicsX2Reg = x2;			
 	GraphicsColourReg = Colour;
-	GraphicsCommandReg = DrawHLine;
+	GraphicsCommandReg = DRAW_H_LINE;
 }
 
 /********************************************************************************************* This function draw a vertical line, 1 pixel at a time starting at the x,y coords specified
 *********************************************************************************************/
 
-void VLine(int x1, int y1, int y2, int Colour)
+void draw_v_line(int x1, int y1, int y2, int Colour)
 {
 	WAIT_FOR_GRAPHICS;
 
@@ -105,13 +106,13 @@ void VLine(int x1, int y1, int y2, int Colour)
 	GraphicsY1Reg = y1;
 	GraphicsY2Reg = y2;
 	GraphicsColourReg = Colour;
-	GraphicsCommandReg = DrawVLine;
+	GraphicsCommandReg = DRAW_V_LINE;
 }
 
 /*******************************************************************************
 *******************************************************************************/
 
-void Line(int x1, int y1, int x2, int y2, int Colour)
+void draw_line(int x1, int y1, int x2, int y2, int Colour)
 {
 	WAIT_FOR_GRAPHICS;
 
@@ -120,25 +121,25 @@ void Line(int x1, int y1, int x2, int y2, int Colour)
 	GraphicsY1Reg = y1;
 	GraphicsY2Reg = y2;
 	GraphicsColourReg = Colour;
-	GraphicsCommandReg = DrawLine;
+	GraphicsCommandReg = DRAW_LINE;
 }
 
 /*******************************************************************************
 *******************************************************************************/
 
-void Clear(int Colour)
+void clear(int Colour)
 {
 	WAIT_FOR_GRAPHICS;
 
 	GraphicsColourReg = Colour;
-	GraphicsCommandReg = ClearScreen;
+	GraphicsCommandReg = CLEAR_SCREEN;
 }
 
 /*******************************************************************************
 ** FILLS INSIDE THE COORDINATES (DOES NOT INCLUDE THE COORDINATES THEMSELVES)
 *******************************************************************************/
 
-void FillBox(int x1, int x2, int y1, int y2, int Colour)
+void fill_square(int x1, int x2, int y1, int y2, int Colour)
 {
 	WAIT_FOR_GRAPHICS;
 
@@ -147,25 +148,16 @@ void FillBox(int x1, int x2, int y1, int y2, int Colour)
 	GraphicsY1Reg = y1;
 	GraphicsY2Reg = y2;	
 	GraphicsColourReg = Colour;
-	GraphicsCommandReg = FillBoxx;
+	GraphicsCommandReg = FILL;
 }
 
 /*********************************************************************************************
 *********************************************************************************************/
 
-void Box(int x1, int x2, int y1, int y2, int Colour)
+void draw_square(int x1, int x2, int y1, int y2, int Colour)
 {
-	HLine(x1, y1, x2, Colour);
-	VLine(x2, y1, y2, Colour);
-	VLine(x1, y1, y2, Colour);
-	HLine(x1, y2, x2, Colour);
-}
-
-/*********************************************************************************************
-*********************************************************************************************/
-
-void BorderedBox(int x1, int x2, int y1, int y2, int Colour, int FillColour)
-{
-	FillBox(x1, x2, y1, y2, FillColour);
-	Box(x1, x2, y1, y2, Colour);
+	draw_h_line(x1, y1, x2, Colour);
+	draw_v_line(x2, y1, y2, Colour);
+	draw_v_line(x1, y1, y2, Colour);
+	draw_h_line(x1, y2, x2, Colour);
 }
