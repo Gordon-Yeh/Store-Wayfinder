@@ -3,7 +3,8 @@
 
 void ResetScreen(void);
 void HomeScreen(void);
-void ItemScreen(void);
+void CategoryScreen(void);
+void ItemScreen(char category[]);
 
 //Widgets
 void BackButton(void);

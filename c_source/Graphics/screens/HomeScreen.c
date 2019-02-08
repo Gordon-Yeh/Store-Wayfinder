@@ -42,7 +42,7 @@ void HomeScreen(void) {
 			// ItemScreen();
 			break;
 		} else if (within_box(add_to_list_box, p)) {
-			ItemScreen();
+			//ItemScreen();
 			break;
 		} else if (within_box(map_box, p)) {
 			break;
