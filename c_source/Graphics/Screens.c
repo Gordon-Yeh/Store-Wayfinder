@@ -4,7 +4,6 @@
 #include "Screens.h"
 #include "Text.h"
 #include "Touchscreen.h"
-
 #include <stdio.h>
 
 void ResetScreen(void) {
