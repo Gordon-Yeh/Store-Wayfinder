@@ -108,15 +108,3 @@ Point ScalePoint(UnscaledPoint unsca_p) {
 	p.y = (unsca_p.y - 120) *479/3900;
 	return p;
 }
-
-
-//test
-// int main(void) {
-	// Init_Touch();
-	// while(1) {
-		// UnscaledPoint p1 = GetPress();
-		// printf("Press: x = %d, y = %d\n", p1.x, p1.y);
-		// UnscaledPoint p2 = GetRelease();
-		// printf("Release: x = %d, y = %d\n", p2.x, p2.y);
-	// }
-// }
