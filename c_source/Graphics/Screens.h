@@ -3,7 +3,7 @@
 
 void ResetScreen(void);
 void HomeMenu(void);
-void SearchScreen(void);
+void ItemScreen(void);
 
 //Widgets
 void BackButton(void);

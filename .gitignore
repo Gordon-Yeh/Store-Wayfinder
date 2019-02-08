@@ -14,3 +14,5 @@ incremental_db
 # produced by quartus when compiling output files
 *.rpt
 *.summary
+
+.vscode
