@@ -12,7 +12,7 @@ int main(void)
     printf("Starting...\n");
 	Init_Touch();
 	
-	ItemScreen();
+	HomeScreen();
 	
     printf("Done...\n");
     return 0 ;

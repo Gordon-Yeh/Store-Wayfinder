@@ -2,10 +2,11 @@
 #include "Colours.h"
 #include "Touchscreen.h"
 #include "Screens.h"
+#include "shapes/box.h"
 
 void ItemScreen(void) {
 	ResetScreen();
-	BackButton();
+	// BackButton();
 	
 	CenteredSentence(FONT2, 20, 541, 0, 55, FOREST_GREEN, 0, "Select your Items", DONT_ERASE);
 	
@@ -17,7 +18,7 @@ void ItemScreen(void) {
 			"Hardware", "Kitchen", "Lighting & Fans", "Outdoors", "Paint", "Storage & Organization", "Tools", "Windows & Doors"};
 	/******************************/
 	
-	SidebarList(list, list_size);
+	// SidebarList(list, list_size);
 	
 	/*temporary items from home depot
 	********************************
@@ -29,16 +30,18 @@ void ItemScreen(void) {
 	
 	int i;
 	//first column
+	Box * first_column[5];
 	for(i = 0; i < num_items && i < 5; i++) {
-		BorderedBox(26, 277, 56+i*86, 135+i*86, BLUE, FOREST_GREEN);
-		//Fill(27, 56+i*86+1, FOREST_GREEN, BLUE);
+		first_column[i] = create_box(26, 56+i*86, 250, 86, BLUE, FOREST_GREEN);
+		draw_box(first_column[i]);
 		CenteredSentence(FONT2, 26, 277, 56+i*86, 135+i*86, WHITE, 0, items[i], DONT_ERASE);
 	}
 	
 	//second column
+	Box * second_column[5];
 	for(i = 0; i < (num_items - 5) && i < 5; i++) {
-		BorderedBox(284, 535, 56+i*86, 135+i*86, BLUE, FOREST_GREEN);
-		//Fill(285, 56+i*86+1, FOREST_GREEN, BLUE);
+		second_column[i] = create_box(284, 56+i*86, 250, 86, BLUE, FOREST_GREEN);
+		draw_box(second_column[i]);
 		CenteredSentence(FONT2, 284, 535, 56+i*86, 135+i*86, WHITE, 0, items[i+5], DONT_ERASE);
 	}
 
@@ -51,11 +54,11 @@ void ItemScreen(void) {
 	}
 }
 
-void SidebarList(char *list[], int list_size) {
-	int i;
-	BorderedBox(542, 793, 6, 135+4*86, BLUE, FOREST_GREEN);
-	CenteredSentence(FONT2, 542, 793, 6, 25, WHITE, 0, "Your List", DONT_ERASE);
-	for(i = 0; i < list_size; i++) {
-		CenteredSentence(FONT1, 542, 793, 56+i*86, 135+i*86, WHITE, 0, list[i], DONT_ERASE);
-	}
-}
+// void SidebarList(char *list[], int list_size) {
+// 	int i;
+// 	BorderedBox(542, 793, 6, 135+4*86, BLUE, FOREST_GREEN);
+// 	CenteredSentence(FONT2, 542, 793, 6, 25, WHITE, 0, "Your List", DONT_ERASE);
+// 	for(i = 0; i < list_size; i++) {
+// 		CenteredSentence(FONT1, 542, 793, 56+i*86, 135+i*86, WHITE, 0, list[i], DONT_ERASE);
+// 	}
+// }
