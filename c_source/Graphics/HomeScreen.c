@@ -13,7 +13,7 @@ void ResetScreen(void) {
 	Box(20, 799, 0, 479, BLUE);
 }
 
-void HomeMenu(void) {
+void HomeScreen(void) {
 	ResetScreen();
 	
 	// BorderedBox(30, 789, 10, 109, BLUE, FOREST_GREEN);
@@ -53,7 +53,6 @@ void HomeMenu(void) {
 		}
 	}
 }
-
 
 //Widgets
 void BackButton(void) {

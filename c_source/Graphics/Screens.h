@@ -2,7 +2,7 @@
 #define SCREENS_H_
 
 void ResetScreen(void);
-void HomeMenu(void);
+void HomeScreen(void);
 void ItemScreen(void);
 
 //Widgets
