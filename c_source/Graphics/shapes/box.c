@@ -3,8 +3,9 @@
 #include "../draw/draw.h"
 #include "../Touchscreen.h"
 
-Box * create_box(int x, int y, int l, int w, int b_c, int f_c) {
+Box * create_box(char name[], int x, int y, int l, int w, int b_c, int f_c) {
     Box * b = malloc(sizeof(Box));
+	b->name = name;
     b->x = x;
     b->y = y;
     b->l = l;
@@ -20,8 +21,8 @@ void destory_box(Box * b) {
 }
 
 void draw_box(Box * b) {
-    draw_square(b->x, b->x + b->l, b->y, b->y + b->w, b->b_c);
-    fill_square(b->x, b->x + b->l, b->y, b->y + b->w, b->f_c);
+    draw_square(b->x, b->x + b->l - 1, b->y, b->y + b->w - 1, b->b_c);
+    fill_square(b->x, b->x + b->l - 1, b->y, b->y + b->w - 1, b->f_c);
 }
 
 int within_box(Box * b, Point p) {

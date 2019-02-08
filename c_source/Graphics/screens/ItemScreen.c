@@ -1,8 +1,9 @@
-#include "Text.h"
-#include "Colours.h"
-#include "Touchscreen.h"
+#include <stdio.h>
 #include "Screens.h"
-#include "shapes/box.h"
+#include "../Text.h"
+#include "../Colours.h"
+#include "../Touchscreen.h"
+#include "../shapes/box.h"
 
 void ItemScreen(void) {
 	ResetScreen();
@@ -32,7 +33,7 @@ void ItemScreen(void) {
 	//first column
 	Box * first_column[5];
 	for(i = 0; i < num_items && i < 5; i++) {
-		first_column[i] = create_box(26, 56+i*86, 250, 86, BLUE, FOREST_GREEN);
+		first_column[i] = create_box(items[i], 26, 56+i*86, 250, 86, BLUE, FOREST_GREEN);
 		draw_box(first_column[i]);
 		CenteredSentence(FONT2, 26, 277, 56+i*86, 135+i*86, WHITE, 0, items[i], DONT_ERASE);
 	}
@@ -40,7 +41,7 @@ void ItemScreen(void) {
 	//second column
 	Box * second_column[5];
 	for(i = 0; i < (num_items - 5) && i < 5; i++) {
-		second_column[i] = create_box(284, 56+i*86, 250, 86, BLUE, FOREST_GREEN);
+		second_column[i] = create_box(items[i], 284, 56+i*86, 250, 86, BLUE, FOREST_GREEN);
 		draw_box(second_column[i]);
 		CenteredSentence(FONT2, 284, 535, 56+i*86, 135+i*86, WHITE, 0, items[i+5], DONT_ERASE);
 	}

@@ -2,7 +2,7 @@
 #include <stdio.h>
 
 #include "Graphics/Colours.h"
-#include "Graphics/Screens.h"
+#include "Graphics/screens/Screens.h"
 #include "Graphics/Touchscreen.h"
 
 #include "Graphics/Text.h"

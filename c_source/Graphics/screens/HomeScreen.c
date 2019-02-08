@@ -1,10 +1,10 @@
 #include <stdio.h>
-#include "Colours.h"
 #include "Screens.h"
-#include "Text.h"
-#include "Touchscreen.h"
-#include "shapes/box.h"
-#include "draw/draw.h"
+#include "../Colours.h"
+#include "../Text.h"
+#include "../Touchscreen.h"
+#include "../shapes/box.h"
+#include "../draw/draw.h"
 
 void ResetScreen(void) {
 	//Clear screen
@@ -16,10 +16,10 @@ void ResetScreen(void) {
 void HomeScreen(void) {
 	ResetScreen();
 	
-	Box * new_list_box = create_box(30, 10, 760, 100, BLUE, FOREST_GREEN);
-	Box * add_to_list_box = create_box(30, 120, 760, 100, BLUE, FOREST_GREEN);
-	Box * map_box = create_box(30, 240, 760, 100, BLUE, FOREST_GREEN);
-	Box * help_box = create_box(30, 360, 760, 100, BLUE, FOREST_GREEN);
+	Box * new_list_box = create_box("new_list", 30, 10, 760, 100, BLUE, FOREST_GREEN);
+	Box * add_to_list_box = create_box("add_to_list", 30, 120, 760, 100, BLUE, FOREST_GREEN);
+	Box * map_box = create_box("map", 30, 240, 760, 100, BLUE, FOREST_GREEN);
+	Box * help_box = create_box("help", 30, 360, 760, 100, BLUE, FOREST_GREEN);
 
 	draw_box(new_list_box);
 	draw_box(add_to_list_box);

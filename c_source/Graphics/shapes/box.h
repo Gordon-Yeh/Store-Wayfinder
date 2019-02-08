@@ -4,6 +4,7 @@
 #include "../Touchscreen.h"
 
 typedef struct {
+	char *name;
     int x;
     int y;
     int l;
@@ -13,7 +14,7 @@ typedef struct {
 } Box;
 
 // constructor for box struct
-Box * create_box(int x, int y, int l, int w, int b_c, int f_c);
+Box * create_box(char name[], int x, int y, int l, int w, int b_c, int f_c);
 
 // destructor for box struct
 void destory_box(Box *);
