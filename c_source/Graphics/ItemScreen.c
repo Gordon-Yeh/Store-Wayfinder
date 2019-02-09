@@ -3,9 +3,16 @@
 #include "Touchscreen.h"
 #include "Screens.h"
 #include "shapes/box.h"
+#include "components/textbox.h"
 
 void ItemScreen(void) {
 	ResetScreen();
+
+	TextBox * back_button = textbox_create(5, 5, 100, 50);
+	textbox_set_box_colour(back_button, DARK_GRAY, DIM_GRAY);
+	textbox_set_text(back_button, "BACK", FONT2, BLACK);
+	textbox_draw(back_button);
+
 	// BackButton();
 	
 	CenteredSentence(FONT2, 20, 541, 0, 55, FOREST_GREEN, 0, "Select your Items", DONT_ERASE);
@@ -46,11 +53,13 @@ void ItemScreen(void) {
 	}
 
 	//Touchscreen
-	Point p;
-	while(1) {
+	Point p, pr;
+	while (1) {
 		p = GetPress();
-		printf("Press: x = %d, y = %d\n", p.x, p.y);
-		GetRelease();
+		pr = GetRelease();
+		if (textbox_within(back_button, pr)) {
+			HomeScreen();
+		}
 	}
 }
 
