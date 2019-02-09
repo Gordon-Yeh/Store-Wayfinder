@@ -2,6 +2,7 @@
 #include <stdio.h>
 
 #include "Graphics/Colours.h"
+#include "Graphics/item/item.h"
 #include "Graphics/screens/Screens.h"
 #include "Graphics/Touchscreen.h"
 

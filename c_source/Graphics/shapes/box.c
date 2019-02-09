@@ -6,7 +6,7 @@
 
 Box * create_box(char name[], int x, int y, int l, int w, int b_c, int f_c) {
     Box * b = malloc(sizeof(Box));
-	b->name = strdup(name);
+	b->name = strdup(name); //strdup allocates memory and copies in name
     b->x = x;
     b->y = y;
     b->l = l;
@@ -18,6 +18,7 @@ Box * create_box(char name[], int x, int y, int l, int w, int b_c, int f_c) {
 }
 
 void destory_box(Box * b) {
+	free(b->name);
     free(b);
 }
 
