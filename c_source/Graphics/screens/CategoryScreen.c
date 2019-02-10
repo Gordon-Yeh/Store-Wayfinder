@@ -4,10 +4,11 @@
 #include "../Colours.h"
 #include "../Touchscreen.h"
 #include "../shapes/box.h"
+#include "../widgets/widgets.h"
 
 void CategoryScreen(void) {
 	ResetScreen();
-	//BackButton();
+	Box * back_box = BackButton();
 	
 	CenteredSentence(FONT2, 30, 789, 0, 55, FOREST_GREEN, 0, "Search By Category", DONT_ERASE);
 	
@@ -48,15 +49,22 @@ void CategoryScreen(void) {
 		p = GetPress();
 		printf("Press: x = %d, y = %d\n", p.x, p.y);
 		GetRelease();
-		for(i = 0; i < num_categories; i++) {
-			if (within_box(category_boxes[i], p)) {
-				ItemScreen(category_boxes[i]->name); //pass name of the category to itemscreen
-				break;
+		if(within_box(back_box, p)) {
+			HomeScreen();
+			break;
+		}
+		else {
+			for(i = 0; i < num_categories; i++) {
+				if (within_box(category_boxes[i], p)) {
+					ItemScreen(category_boxes[i]->name); //pass name of the category to itemscreen
+					break;
+				}
 			}
 		}
 	}
 	
 	//Clean up box memory
+	destroy_box(back_box);
 	for(i = 0; i < num_categories; i++) {
 		destroy_box(category_boxes[i]);
 	}

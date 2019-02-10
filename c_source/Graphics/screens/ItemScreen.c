@@ -4,22 +4,15 @@
 #include "../Colours.h"
 #include "../Touchscreen.h"
 #include "../shapes/box.h"
+#include "../widgets/widgets.h"
 
 void ItemScreen(char category[]) {
 	ResetScreen();
-	// BackButton();
+	Box * back_box = BackButton();
 	
 	CenteredSentence(FONT2, 20, 541, 0, 55, FOREST_GREEN, 0, "Select your Items", DONT_ERASE);
 	
-	/*temporary list from home depot
-	********************************
-	*/
-	int list_size = 15; //will be dynamic data (max 15 categories)
-	char *list[] = {"Appliances", "Bath", "Building Materials", "Decor & Blinds", "Electrical", "Floors & Area Rugs", "Furniture", 
-			"Hardware", "Kitchen", "Lighting & Fans", "Outdoors", "Paint", "Storage & Organization", "Tools", "Windows & Doors"};
-	/******************************/
-	
-	// SidebarList(list, list_size);
+	SidebarList();
 	
 	/*temporary items from home depot
 	********************************
@@ -31,18 +24,17 @@ void ItemScreen(char category[]) {
 	
 	int i;
 	//first column
-	Box * first_column[5];
+	Box * item_boxes[num_items];
 	for(i = 0; i < num_items && i < 5; i++) {
-		first_column[i] = create_box(items[i], 26, 56+i*86, 252, 80, BLUE, FOREST_GREEN);
-		draw_box(first_column[i]);
+		item_boxes[i] = create_box(items[i], 26, 56+i*86, 252, 80, BLUE, FOREST_GREEN);
+		draw_box(item_boxes[i]);
 		CenteredSentence(FONT2, 26, 277, 56+i*86, 135+i*86, WHITE, 0, items[i], DONT_ERASE);
 	}
 	
 	//second column
-	Box * second_column[5];
 	for(i = 0; i < (num_items - 5) && i < 5; i++) {
-		second_column[i] = create_box(items[i], 284, 56+i*86, 252, 80, BLUE, FOREST_GREEN);
-		draw_box(second_column[i]);
+		item_boxes[i] = create_box(items[i], 284, 56+i*86, 252, 80, BLUE, FOREST_GREEN);
+		draw_box(item_boxes[i]);
 		CenteredSentence(FONT2, 284, 535, 56+i*86, 135+i*86, WHITE, 0, items[i+5], DONT_ERASE);
 	}
 
@@ -52,5 +44,23 @@ void ItemScreen(char category[]) {
 		p = GetPress();
 		printf("Press: x = %d, y = %d\n", p.x, p.y);
 		GetRelease();
+		if(within_box(back_box, p)) {
+			HomeScreen();
+			break;
+		}
+		else {
+			for(i = 0; i < num_items; i++) {
+				if (within_box(item_boxes[i], p)) {
+					//TODO: add item to list
+					ItemScreen(category);
+					break;
+				}
+			}
+		}
+	}
+	
+	destroy_box(back_box);
+	for(i = 0; i < num_items; i++) {
+		destroy_box(item_boxes[i]);
 	}
 }

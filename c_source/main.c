@@ -19,8 +19,7 @@ int main(void)
 	Init_Touch();
 	
 	//HomeScreen();
-	ResetScreen();
-	SidebarList();
+	ItemScreen("category");
 	
     printf("Done...\n");
     return 0 ;
