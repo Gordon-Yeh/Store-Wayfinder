@@ -55,4 +55,9 @@ void CategoryScreen(void) {
 			}
 		}
 	}
+	
+	//Clean up box memory
+	for(i = 0; i < num_categories; i++) {
+		destroy_box(category_boxes[i]);
+	}
 }

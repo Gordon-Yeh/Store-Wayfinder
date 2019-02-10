@@ -54,12 +54,3 @@ void ItemScreen(char category[]) {
 		GetRelease();
 	}
 }
-
-// void SidebarList(char *list[], int list_size) {
-// 	int i;
-// 	BorderedBox(542, 793, 6, 135+4*86, BLUE, FOREST_GREEN);
-// 	CenteredSentence(FONT2, 542, 793, 6, 25, WHITE, 0, "Your List", DONT_ERASE);
-// 	for(i = 0; i < list_size; i++) {
-// 		CenteredSentence(FONT1, 542, 793, 56+i*86, 135+i*86, WHITE, 0, list[i], DONT_ERASE);
-// 	}
-// }

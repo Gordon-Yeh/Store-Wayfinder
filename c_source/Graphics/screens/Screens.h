@@ -6,8 +6,4 @@ void HomeScreen(void);
 void CategoryScreen(void);
 void ItemScreen(char category[]);
 
-//Widgets
-void BackButton(void);
-void SidebarList(char *list[], int list_size);
-
 #endif

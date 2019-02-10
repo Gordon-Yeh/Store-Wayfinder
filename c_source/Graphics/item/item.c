@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <string.h>
-#include <
+//#include <stddef.h>
+#include "../item/item.h"
 #include "../shapes/box.h"
 
 Item * create_item(char name[], char category[], int x, int y) {
@@ -12,9 +13,9 @@ Item * create_item(char name[], char category[], int x, int y) {
     return i;
 }
 
-void destory_item(Item * i) {
+void destroy_item(Item * i) {
 	free(i->name);
     free(i->category);
-	destory_box(i->delete_box);
+	destroy_box(i->delete_box);
 	free(i);
 }

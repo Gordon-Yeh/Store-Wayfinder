@@ -15,6 +15,6 @@ typedef struct {
 Item * create_item(char name[], char category[], int x, int y);
 
 // destructor for item struct
-void destory_item(Item * i);
+void destroy_item(Item * i);
 
 #endif

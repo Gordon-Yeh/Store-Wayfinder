@@ -17,7 +17,7 @@ typedef struct {
 Box * create_box(char name[], int x, int y, int l, int w, int b_c, int f_c);
 
 // destructor for box struct
-void destory_box(Box *);
+void destroy_box(Box *);
 
 // function for plotting the box on screen
 void draw_box(Box *);

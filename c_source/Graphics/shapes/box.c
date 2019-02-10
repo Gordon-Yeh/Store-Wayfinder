@@ -17,7 +17,7 @@ Box * create_box(char name[], int x, int y, int l, int w, int b_c, int f_c) {
     return b;
 }
 
-void destory_box(Box * b) {
+void destroy_box(Box * b) {
 	free(b->name);
     free(b);
 }

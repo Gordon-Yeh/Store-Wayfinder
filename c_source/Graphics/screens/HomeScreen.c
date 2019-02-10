@@ -1,10 +1,12 @@
 #include <stdio.h>
 #include "Screens.h"
+#include "../Globalvars.h"
 #include "../Colours.h"
 #include "../Text.h"
 #include "../Touchscreen.h"
 #include "../shapes/box.h"
 #include "../draw/draw.h"
+#include "../item/item.h"
 
 void ResetScreen(void) {
 	//Clear screen
@@ -33,16 +35,21 @@ void HomeScreen(void) {
 	
 	//Touchscreen
 	Point p, p1;
+	int i;
 	while (1) {
 		p = GetPress();
 		printf("Press: x = %d, y = %d\n", p.x, p.y);
 		p1 = GetRelease(); //wait for a getrelease
 		printf("Release: x = %d, y = %d\n", p1.x, p1.y);
 		if (within_box(new_list_box, p)) {
-			// ItemScreen();
+			for(i = 0; i < item_list_size; i++) {
+				destroy_item(item_list[i]);
+			}
+			item_list_size = 0;
+			CategoryScreen();
 			break;
 		} else if (within_box(add_to_list_box, p)) {
-			//ItemScreen();
+			CategoryScreen();
 			break;
 		} else if (within_box(map_box, p)) {
 			break;
@@ -50,4 +57,10 @@ void HomeScreen(void) {
 			break;
 		}
 	}
+	
+	//Clean up box memory
+	destroy_box(new_list_box);
+	destroy_box(add_to_list_box);
+	destroy_box(map_box);
+	destroy_box(help_box);
 }
