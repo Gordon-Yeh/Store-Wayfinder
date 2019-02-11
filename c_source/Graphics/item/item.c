@@ -6,8 +6,12 @@
 
 Item * create_item(char name[], char category[], int x, int y) {
     Item * i = malloc(sizeof(Item));
-	i->name = strdup(name); //strdup allocates memory and copies in name
-	i->category = strdup(category);
+	i->name = malloc(strlen(name)+1);
+	strcpy(i->name, name);
+	//i->name = strdup(name); //strdup allocates memory and copies in name
+	i->category = malloc(strlen(category)+1);
+	strcpy(i->category, category);
+	//i->category = strdup(category);
     i->x = x;
     i->y = y;
     return i;
