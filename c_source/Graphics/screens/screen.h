@@ -16,7 +16,7 @@ void screen_init();
  * change the LCD display to a different screen
  * @param next_screen the screen to change to
  */
-void screen_switch(screen_t next_screen);
+void screen_draw(screen_t screen);
 
 /**
  * polling for touch action from user
