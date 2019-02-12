@@ -1,7 +1,9 @@
 #include "Touchscreen.h"
 #include "screens/screen.h"
 
-int app_run() {
+#include "gui.h"
+
+int gui_run() {
     screen_t curr_screen = HOME;
 
     while (1) {
@@ -12,10 +14,10 @@ int app_run() {
     } 
 }
 
-int app_start() {
+int gui_start() {
     printf("Starting...\n");
 	Init_Touch();
     screen_init();
 
-    app_run();
+    gui_run();
 }

@@ -1,10 +1,10 @@
 //NOTE: (20, 0) is top left, (799, 479) is bottom right
 #include <stdio.h>
 
-#include "Graphics/app.h"
+#include "Graphics/gui.h"
 
 int main(void)
 {
-	app_start();
-    return 0 ;
+	gui_start();
+    return 0;
 }
