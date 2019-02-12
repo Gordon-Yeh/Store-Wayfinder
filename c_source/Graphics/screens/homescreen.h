@@ -1,16 +1,8 @@
 #ifndef HOMESCREENS_H_
 #define HOMESCREENS_H_
 
-#include "screens.h"
-#include "../shapes/box.h"
-
-static struct {
-    // TODO: add all the component of homescreen here
-    Box * new_list_box;
-    Box * add_to_list_box;
-    Box * map_box;
-    Box * help_box;
-} _HomeScreen;
+#include "screen.h"
+#include "../components/textbox.h"
 
 /**
  * initalize homescreen
