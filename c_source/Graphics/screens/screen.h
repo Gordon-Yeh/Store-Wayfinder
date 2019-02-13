@@ -3,7 +3,8 @@
 
 typedef enum screen {
     HOME,
-    ITEM
+    CATEGORIES,
+    ITEM,
 } screen_t;
 
 /**
