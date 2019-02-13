@@ -70,7 +70,6 @@ screen_t categories_screen_listen(void) {
     while (1) {
         pp = GetPress();
         pr = GetRelease(); //wait for a getrelease
-        printf("touched (%d, %d) \n", pr.x, pr.y);
         if (textbox_within(_CategoriesScreen.back_button, pr)) {
             return HOME;
         }
