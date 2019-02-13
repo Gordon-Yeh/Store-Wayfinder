@@ -8,14 +8,12 @@ int gui_run() {
 
     while (1) {
         screen_draw(curr_screen);
-        printf("listening!\n");
         curr_screen = screen_listen(curr_screen);
-        printf("switching screen!\n");
     } 
 }
 
 int gui_start() {
-    printf("Starting...\n");
+    printf("GUI starting...\n");
 	Init_Touch();
     screen_init();
 
