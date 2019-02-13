@@ -53,8 +53,8 @@ screen_t homescreen_listen() {
         if (textbox_within(_HomeScreen.new_list_button, pr)) {
             // TODO:
         } else if (textbox_within(_HomeScreen.add_to_list_button, pr)) {
-            printf("switching to item screen!");
-            return ITEM;
+            printf("switching to categories screen!");
+            return CATEGORIES;
         } else if (textbox_within(_HomeScreen.map_button, pr)) {
             // TODO:
         } else if (textbox_within(_HomeScreen.help_button, pr)) {
