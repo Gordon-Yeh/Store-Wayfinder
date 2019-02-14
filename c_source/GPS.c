@@ -14,6 +14,7 @@
 //define 7seg display
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 void Init_GPS(void)
 {
@@ -64,7 +65,7 @@ int swapEndian(char *s)
    return val;
 }
 
-void getData(char* all_data)
+void getData(char all_data[100])
 {
    //while (!(GPS_LineStatusReg & 0x1));
    //char result = readGPS();
@@ -96,7 +97,20 @@ void GPSFlush(void)
    return; // no more characters so return
 }
 
+void getCoordinate(char all_data[100], char longtitude[20], char latitude[20]){
+   char* temp = strtok(all_data, ",");
+   for (int i=0; i<6 && temp != NULL; i++){
+      longtitude = i==2? temp : longtitude;
+      longtitude = i==3? strcat(longtitude, temp) : longtitude;
+      latitude = i==4? temp : latitude;
+      latitude = i==5? strcat(latitude, temp) : latitude;
+      
+      temp = strtok(NULL, ",");
+   }
+   printf("long: %s\n", longtitude);
+   printf("lat: %s\n", latitude);
 
+}
 int mainGPS(void)
 {
    Init_GPS();
@@ -105,7 +119,8 @@ int mainGPS(void)
    writeCmd(msg);
 
    //read result
-   char* all_data = (char*) malloc(100);
+   //char* all_data = (char*) malloc(100);
+   char all_data[100];
    getData(all_data);
    printf("%s\n", all_data);
 
