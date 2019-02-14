@@ -65,7 +65,7 @@ int swapEndian(char *s)
    return val;
 }
 
-void getData(char* all_data)
+void getData(char all_data[100])
 {
    //while (!(GPS_LineStatusReg & 0x1));
    //char result = readGPS();
@@ -110,6 +110,7 @@ void getCoordinate(char all_data[100], char longtitude[20], char latitude[20]){
    printf("long: %s\n", longtitude);
    printf("lat: %s\n", latitude);
 
+}
 int mainGPS(void)
 {
    Init_GPS();
