@@ -8,7 +8,7 @@ import serial
 
 BAUD = 38400
 # this is the port on the Raspberry Pi; it will be different for serial ports on other systems.
-PORT = "/dev/ttyAMA0"
+PORT = "/dev/serial0"
 
 TIMEOUT = 0.5    # I needed a longer timeout than ladyada's 0.2 value
 SERIALNUM = 0    # start with 0, each camera should have a unique ID.
@@ -93,7 +93,7 @@ def readbuffer(bytes):
 	photo = []
 
 	# bytes to read each time (must be a mutiple of 4)
-	inc = 8192
+	inc = 512
 
 	while( addr < bytes ):
  		# on the last read, we may need to read fewer bytes.
