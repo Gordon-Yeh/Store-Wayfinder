@@ -101,7 +101,7 @@ function send_sms(from,to,body)
      end)
 end
 
-function check_wifi()
+function check_wifi(message)
   ip = wifi.sta.getip()
 
  if(ip==nil) then
@@ -111,7 +111,7 @@ function check_wifi()
   print("Connected to AP!")
   print(ip)
   -- send a text message from, to, text
-  send_sms("(604) 359-2528","(778) 928-9611","Ring-Ring - this is your breadboard calling!!!!")
+  send_sms("(604) 359-2528","(778) 928-9611",message)
 
  end
 end

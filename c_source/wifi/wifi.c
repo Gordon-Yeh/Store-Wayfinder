@@ -9,6 +9,8 @@
 #include <time.h>
 #include <string.h>
 
+#include "Wifi.h"
+
 #define Wifi_ReceiverFifo (*(volatile unsigned char *)(0xFF210240))
 #define Wifi_TransmitterFifo (*(volatile unsigned char *)(0xFF210240))
 #define Wifi_InterruptEnableReg (*(volatile unsigned char *)(0xFF210242))
@@ -22,6 +24,99 @@
 #define Wifi_DivisorLatchLSB (*(volatile unsigned char *)(0xFF210240))
 #define Wifi_DivisorLatchMSB (*(volatile unsigned char *)(0xFF210242))
 
+/*
+ * Puts character into Transmitter Fifo so it can be read by wifi module
+ */
+char putcharWifi(char input)
+{
+ // wait for Transmitter Holding Register bit (5) of line status register to be '1'
+    while (!(Wifi_LineStatusReg && 0x20));
+    Wifi_TransmitterFifo = input;
+    return input;
+}
+
+/*
+ * Reads character from Reciever Fifo
+ */
+unsigned char getcharWifi( void )
+{
+ // wait for Data Ready bit (0) of line status register to be '1'
+    while (!(Wifi_LineStatusReg & 0x1));
+    return Wifi_ReceiverFifo;
+}
+
+/*
+ * the following function polls the UART to determine if any character
+ * has been received. It doesn't wait for one, or read it, it simply tests
+ * to see if one is available to read from the FIFO
+ */
+int WifiTestForReceivedData(void)
+{
+ // if Wifi_LineStatusReg bit 0 is set to 1
+    if (Wifi_LineStatusReg & 0x1){
+        return 1;
+    }
+ //return TRUE, otherwise return FALSE
+    return 0;
+
+}
+
+/*
+ * Pauses execution for specified number of seconds
+ */
+void delay(double number_of_seconds)
+{
+    // Converting time into milli_seconds
+    int milli_seconds = (int) (1000 * number_of_seconds);
+
+    // Saving start time
+    clock_t start_time = clock();
+
+    // looping till required time is not achieved
+    while (clock() < start_time + milli_seconds)
+        ;
+}
+
+/*
+ * Sends contents of char pointer to UART
+ */
+void WifiSendLine(char* message){
+	for(int i = 0; i < strlen(message); i ++){
+			char c = putcharWifi(message[i]);
+			delay(0.01);
+	}
+}
+
+/*
+ * saves the data received from the wifi chip to a buffer
+ */
+void saveBuffer(void)
+{
+	 char Buffer[100];
+	 int i = 0;
+	 while (Wifi_LineStatusReg & 0x1){
+	        Buffer[i] = Wifi_ReceiverFifo;
+	        i++;
+	 }
+
+	 return;
+}
+
+/*
+ * Remove/flush the UART receiver buffer by removing any unread characters
+ */
+void WifiFlush(void)
+{
+ // while bit 0 of Line Status Register == ‘1’
+    while (Wifi_LineStatusReg & 0x1){
+        Wifi_ReceiverFifo;
+    }
+    return;
+}
+
+/*
+ * initializes wifi module and connects to wifi
+ */
 void Init_Wifi(void)
 {
 	//set bit 7 of Line Control Register to 1, to gain access to the baud rate registers
@@ -40,116 +135,33 @@ void Init_Wifi(void)
 
 	//Now clear all bits in the FiFo control registers
 	  Wifi_FifoControlReg = 0;
-	  printf("Initialization succeeded\n");
-}
 
-char putcharWifi(char input)
-{
- // wait for Transmitter Holding Register bit (5) of line status register to be '1'
-    while (!(Wifi_LineStatusReg && 0x20));
-    Wifi_TransmitterFifo = input;
-    return input;
-}
-
-unsigned char getcharWifi( void )
-{
- // wait for Data Ready bit (0) of line status register to be '1'
-    while (!(Wifi_LineStatusReg & 0x1));
-    return Wifi_ReceiverFifo;
-}
-
-// the following function polls the UART to determine if any character
-// has been received. It doesn't wait for one, or read it, it simply tests
-// to see if one is available to read from the FIFO
-int WifiTestForReceivedData(void)
-{
- // if Wifi_LineStatusReg bit 0 is set to 1
-    if (Wifi_LineStatusReg & 0x1){
-        return 1;
-    }
- //return TRUE, otherwise return FALSE
-    return 0;
-
-}
-
-void saveAndPrintBuffer(void)
-{
-	 char Buffer[100];
-	 int i = 0;
-	 while (Wifi_LineStatusReg & 0x1){
-	        Buffer[i] = Wifi_ReceiverFifo;
-	        //printf("%c\n", Buffer[i]); //DEBUG
-	        i++;
-	 }
-	 printf("%s\n", Buffer);
-
-	 return;
-}
-
-
-//
-// Remove/flush the UART receiver buffer by removing any unread characters
-//
-void WifiFlush(void)
-{
- // while bit 0 of Line Status Register == ‘1’
-    while (Wifi_LineStatusReg & 0x1){
-        Wifi_ReceiverFifo;
-    }
-    return;
-}
-
-void delay(double number_of_seconds)
-{
-    // Converting time into milli_seconds
-    int milli_seconds = (int) (1000 * number_of_seconds);
-
-    // Saving start time
-    clock_t start_time = clock();
-
-    // looping till required time is not achieved
-    while (clock() < start_time + milli_seconds)
-        ;
-}
-
-void WifiSendLine(char* message){
-	for(int i = 0; i < strlen(message); i ++){
-			char c = putcharWifi(message[i]);
-			delay(0.01);
-	}
-}
-
-int main (void){
-
-	   Init_Wifi();
-	   WifiFlush();
-
-	   char EndLine[2] = "\r\n" ;
-	   char StartFile[35] = "dofile(\"send_text_message.lua\")\r\n";
-	   char CheckWifi[14] = "check_wifi()\r\n";
-
-
-	  //send new line characters to get wifi dongle to lock onto baud rate
-      WifiSendLine(EndLine);
-	  saveAndPrintBuffer();
-	  delay(0.5);
+	  //connect to wifi
+	  char EndLine[2] = "\r\n" ;
+	  char StartFile[35] = "dofile(\"send_text_message.lua\")\r\n";
 	  WifiSendLine(EndLine);
-	  saveAndPrintBuffer();
-	  delay(0.5);
+	  saveBuffer();
 	  WifiSendLine(EndLine);
-	  saveAndPrintBuffer();
-	  delay(0.5);
+	  saveBuffer();
+	  WifiSendLine(EndLine);
+	  saveBuffer();
 
 	  //open wifi file and execute send msg function
-      WifiSendLine(StartFile);
-      saveAndPrintBuffer();
-      delay(0.5);
-      WifiSendLine(CheckWifi);
-      saveAndPrintBuffer();
-      delay(0.5);
-
-      WifiFlush();
-
-      return 0;
-
+	  WifiSendLine(StartFile);
+	  saveBuffer();
 }
+
+/*
+ * sends text through twillio containing the content to the char* message
+ */
+void WifiSendText(char* message){
+	char CheckWifi1[12] = "check_wifi(\"";
+	char CheckWifi2[4] = "\")\r\n";
+	WifiSendLine(CheckWifi1);
+	WifiSendLine(message);
+	WifiSendLine(CheckWifi2);
+	saveBuffer();
+
+	WifiFlush();
+}
+
