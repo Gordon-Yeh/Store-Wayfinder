@@ -961,7 +961,7 @@ set_global_assignment -name POWER_PRESET_COOLING_SOLUTION "23 MM HEAT SINK WITH 
 set_global_assignment -name POWER_BOARD_THERMAL_MODEL "NONE (CONSERVATIVE)"
 set_global_assignment -name TIMEQUEST_MULTICORNER_ANALYSIS ON
 set_global_assignment -name PROJECT_OUTPUT_DIRECTORY output_files
-set_global_assignment -name VERILOG_FILE GraphicsController_Verilog.v
+set_global_assignment -name VERILOG_FILE source/GraphicsController_Verilog.v
 set_global_assignment -name VHDL_FILE source/VideoRamFrameBuffer.vhd
 set_global_assignment -name VERILOG_FILE source/VGADataMux_Verilog.v
 set_global_assignment -name VHDL_FILE source/VGADataMux.vhd
