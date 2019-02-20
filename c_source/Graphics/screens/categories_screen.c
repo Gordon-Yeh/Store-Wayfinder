@@ -1,15 +1,16 @@
 #include "../components/textbox.h"
 #include "../Colours.h"
+#include "../Globalvars.h"
 #include "../Text.h"
 #include "../Touchscreen.h"
 
 #include "screen.h"
 
 static const int max_buttons_per_col = 5;
-static const int max_col = 2;
-static const int max_buttons = 10; // buttons_per_col * num_of_col
+static const int max_col = 3;
+static const int max_buttons = 15; // buttons_per_col * num_of_col
 
-static const int col_gap = 20;
+static const int col_gap = 8;
 static const int row_gap = 10;
 static const int base_x = 25;
 static const int base_y = 60;
@@ -19,14 +20,13 @@ static const int button_width = 75;
 // every shape that should be plotted should go here
 static struct {
     TextBox * back_button;
-    TextBox * category_buttons[10];
+    TextBox * category_buttons[15];
     int num_categories;
     // TODO: add all the component of homescreen here
 } _CategoriesScreen;
 
-int categories_screen_init() {
-    int num_items = 15;
-    char * item_categories[] = {
+void categories_screen_init() {
+    char * item_categories[15] = {
         "Appliances", "Bath", "Building Materials", "Decor & Blinds", "Electrical",
         "Floors & Area Rugs", "Furniture", "Hardware", "Paint", "Tools",
         "Kitchen", "Lighting & Fans", "Outdoors", "Storage & Organization", "Windows & Doors"
@@ -52,12 +52,13 @@ int categories_screen_init() {
 
     TextBox * bb = textbox_create(base_x, 5, 100, 50);
 	textbox_set_box_colour(bb, DARK_GRAY, DIM_GRAY);
-	textbox_set_text(bb, "BACK", FONT2, BLACK);
-	textbox_draw(bb);
+	textbox_set_text(bb, "BACK", FONT2, WHITE);
     _CategoriesScreen.back_button = bb;
 }
 
 void categories_screen_draw(void) {
+	//title
+	CenteredSentence(FONT2, 30, 789, 0, 55, FOREST_GREEN, 0, "Search By Category", DONT_ERASE);
     for (int i = 0; i < _CategoriesScreen.num_categories; i++) {
         textbox_draw(_CategoriesScreen.category_buttons[i]);
     }
@@ -69,9 +70,19 @@ screen_t categories_screen_listen(void) {
 	Point pp, pr;
     while (1) {
         pp = GetPress();
-        pr = GetRelease(); //wait for a getrelease
+		pr = GetRelease();
         if (textbox_within(_CategoriesScreen.back_button, pr)) {
             return HOME;
         }
+		else {
+			//look through each button to see if it was pressed
+			for(int i = 0; i < _CategoriesScreen.num_categories; i++) {
+				if (textbox_within(_CategoriesScreen.category_buttons[i], pr)) {
+					//set the global current category to the category selected
+					cur_category = _CategoriesScreen.category_buttons[i]->text;
+					return ITEM;
+				}
+			}
+		}
 	}
 }

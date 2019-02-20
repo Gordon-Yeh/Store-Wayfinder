@@ -17,18 +17,21 @@ typedef struct {
     int colour;
     Box * box;
 
-    // TODO:
-    int v_align;
+	// Positive h_align means shifting the text right
     int h_align;
+	// Positive v_align means shifting the text down
+    int v_align;
 } TextBox;
 
 TextBox * textbox_create(int x, int y, int l, int w);
 
-void textbox_destory(TextBox *tb);
+void textbox_destroy(TextBox *tb);
+
+void textbox_set_box_colour(TextBox *tb, int b_c, int f_c);
 
 void textbox_set_text(TextBox *tb, char *text, int font, int colour);
 
-void textbox_set_box_colour(TextBox *tb, int b_c, int f_c);
+void textbox_set_text_align(TextBox *tb, int h_align, int v_align);
 
 int textbox_get_length(TextBox *tb);
 int textbox_get_width(TextBox *tb);
