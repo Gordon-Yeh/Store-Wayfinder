@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include "Touchscreen.h"
 #include "screens/screen.h"
 
@@ -18,4 +19,5 @@ int gui_start() {
     screen_init();
 
     gui_run();
+	return 0;
 }

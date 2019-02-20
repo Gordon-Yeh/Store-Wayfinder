@@ -7,7 +7,9 @@
  * initalize categories_screen
  * needs to be called before any other categories_screen functions
  */
-int categories_screen_init(void);
+void categories_screen_init(void);
+
+void categories_screen_destroy(void);
 
 /**
  *  draw the categories_screen on the map

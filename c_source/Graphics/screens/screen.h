@@ -5,6 +5,9 @@ typedef enum screen {
     HOME,
     CATEGORIES,
     ITEM,
+	MAP,
+	HELP,
+	THIEF
 } screen_t;
 
 /**
