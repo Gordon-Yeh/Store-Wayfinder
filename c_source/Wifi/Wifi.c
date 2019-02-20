@@ -83,7 +83,6 @@ void delay(double number_of_seconds)
  */
 void WifiSendLine(char* message){
 	for(int i = 0; i < strlen(message); i ++){
-			char c = putcharWifi(message[i]);
 			delay(0.01);
 	}
 }
