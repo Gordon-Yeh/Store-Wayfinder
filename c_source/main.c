@@ -1,7 +1,8 @@
 #include "Graphics/gui.h"
 #include "io/bridge.h"
 
-int sys_init() {
+int sys_init()
+{
     bridge_init();
 }
 
