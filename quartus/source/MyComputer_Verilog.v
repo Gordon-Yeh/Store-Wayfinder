@@ -382,7 +382,10 @@ module MyComputer_Verilog (
 				 .BlueTooth_TxData 			(GPIO_1[34]),
 				 
 				 .TouchScreen_RxData 		(GPIO_0[11]),
-				 .TouchScreen_TxData 		(GPIO_0[10])
+				 .TouchScreen_TxData 		(GPIO_0[10]),
+				 
+				 .Wifi_RxData 		(GPIO_1[33]),
+				 .Wifi_TxData 		(GPIO_1[35])
 		);
 		
 		// Map 16 bit memory upper and lower data byte strobes to individual wires

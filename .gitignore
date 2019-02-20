@@ -1,5 +1,7 @@
 *.pdf
 *.xml
+
+# record files from quartus
 db
 incremental_db
 .qsys_edit
@@ -8,3 +10,12 @@ incremental_db
 *.cdf
 *.qws
 *.done
+
+# produced by quartus when compiling output files
+*.rpt
+*.summary
+*.smsg
+*.jdi
+*.sld
+
+.vscode
