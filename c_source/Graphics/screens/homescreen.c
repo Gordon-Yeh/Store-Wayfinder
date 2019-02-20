@@ -1,7 +1,9 @@
 #include "../Colours.h"
+#include "../Globalvars.h"
 #include "../Text.h"
 #include "../components/textbox.h"
 #include "../Touchscreen.h"
+#include <stdio.h>
 
 #include "screen.h"
 
@@ -14,12 +16,12 @@ static struct {
     // TODO: add all the component of homescreen here
 } _HomeScreen;
 
-int homescreen_init() {
+void homescreen_init() {
     // declare and set all shapes and components on the screen here
     TextBox * new_list_button = textbox_create(30, 10, 760, 100);
-	TextBox * add_to_list_button = textbox_create(30, 120, 760, 100);
-	TextBox * map_button = textbox_create(30, 240, 760, 100);
-	TextBox * help_button = textbox_create(30, 360, 760, 100);
+	TextBox * add_to_list_button = textbox_create(30, 120, 760, 110);
+	TextBox * map_button = textbox_create(30, 240, 760, 110);
+	TextBox * help_button = textbox_create(30, 360, 760, 110);
 
 	textbox_set_box_colour(new_list_button, BLUE, FOREST_GREEN);
 	textbox_set_box_colour(add_to_list_button, BLUE, FOREST_GREEN);
@@ -48,10 +50,18 @@ screen_t homescreen_listen() {
 	Point pp, pr;
     while (1) {
         pp = GetPress();
-        pr = GetRelease(); //wait for a getrelease
+		pr = GetRelease();
+		printf("Press %d, %d", pp.x, pp.y);
         if (textbox_within(_HomeScreen.new_list_button, pr)) {
-            // TODO:
+			//Free item_list memory
+			for(int i = 0; i < item_list_size; i++) {
+				destroy_item(item_list[i]);
+			}
+			//Set the global item_list_size to 0
+            item_list_size = 0;
+			return CATEGORIES;
         } else if (textbox_within(_HomeScreen.add_to_list_button, pr)) {
+			//Keep using the current item_list
             return CATEGORIES;
         } else if (textbox_within(_HomeScreen.map_button, pr)) {
             // TODO:

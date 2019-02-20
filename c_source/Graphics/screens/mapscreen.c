@@ -1,0 +1,1 @@
+//map screen can only be as big as (20,0) to (541, 479)
