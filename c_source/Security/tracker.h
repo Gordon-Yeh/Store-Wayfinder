@@ -18,12 +18,13 @@ typedef struct {
 /**
  * start the tracker concurrently
  * @param update_rate - rate at which the location updates (in ms)
+ * @return 1 - if successfully starts, 0 - otherwise
  */
-void tracker_start(int update_rate);
+int tracker_start(int update_rate);
 
 /**
  * @returns the location status of the device
  */
-int tracker_status();
+int tracker_get_status();
 
-#endif
+#endif // TRACKER_H
