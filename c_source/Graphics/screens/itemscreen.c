@@ -97,14 +97,14 @@ screen_t item_screen_listen(void) {
 			//look through each item button to see if we add the item
 			for(int i = 0; i < _ItemScreen.num_items; i++) {
 				//Limit the number of items to 7 for now
-				if(textbox_within(_ItemScreen.item_buttons[i], pr) && item_list_size < 7) {
+				if(textbox_within(_ItemScreen.item_buttons[i], pr)) {
 					add_to_item_list(_ItemScreen.item_buttons[i]->text);
 					return ITEM;
 				}
 			}
 			//look through each item delete_button to see if we delete the item
 			for(int j = 0; j < item_list_size; j++) {
-				if(textbox_within(item_list[j]->delete_textbox, pr) && item_list_size > 0) {
+				if(textbox_within(item_list[j]->delete_textbox, pr)) {
 					remove_from_item_list(j);
 					return ITEM;
 				}

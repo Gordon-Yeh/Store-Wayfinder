@@ -1,8 +1,20 @@
 #include <stdio.h>
+#include "Globalvars.h"
 #include "Touchscreen.h"
+#include "item/item.h"
 #include "screens/screen.h"
 
 #include "gui.h"
+
+/*******************************/
+//GLOBAL VARIABLES
+char *cur_category;
+
+int item_list_size = 0;
+Item * item_list[20];
+int pagenum = 0;
+const int pagesize = 7;
+/*******************************/
 
 int gui_run() {
     screen_t curr_screen = HOME;
