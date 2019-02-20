@@ -15,7 +15,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
 #include "GPS.h"
 
 void Init_GPS(void)
@@ -40,7 +39,6 @@ void Init_GPS(void)
 unsigned char getChar()
 {
    while (!(GPS_LineStatusReg & 0x1));
-   //printf("%x\n", GPS_ReceiverFifo);
    return GPS_ReceiverFifo;
 }
 
@@ -58,23 +56,9 @@ void writeCmd(char* arr)
    }
 }
 
-int swapEndian(char *s)
-{
-   register int val;
-   val = strtoul(s, NULL, 16);
-   val = ((val << 8) & 0xFF00FF00) | ((val >> 8) & 0xFF00FF );
-   val = (val << 16) | ((val >> 16) & 0xFFFF);
-   return val;
-}
-
 void getData(char all_data[100])
 {
-   //while (!(GPS_LineStatusReg & 0x1));
-   //char result = readGPS();
    char val;
-   //char* all_data;
-   //wait for a new cmd
-   //while (readGPS() != '$');
    int i;
    for (i = 0; val != '*' && i < 100; i++)
    {
@@ -84,8 +68,6 @@ void getData(char all_data[100])
 
    if (i<100)
    		all_data[i] = '\0';
-   //int data = swapEndian(&all_data);
-
 }
 
 void GPSFlush(void)
@@ -98,36 +80,30 @@ void GPSFlush(void)
    // read unwanted char out of fifo receiver buffer
    return; // no more characters so return
 }
-
-gps_point getCoordinate(char all_data[100], char longtitude[20], char latitude[20]){
-   char* temp = strtok(all_data, ",");
-   for (int i=0; i<6 && temp != NULL; i++){
-      longtitude = i==2? temp : longtitude;
-      longtitude = i==3? strcat(longtitude, temp) : longtitude;
-      latitude = i==4? temp : latitude;
-      latitude = i==5? strcat(latitude, temp) : latitude;
-      
-      temp = strtok(NULL, ",");
-   }
-   printf("long: %s\n", longtitude);
-   printf("lat: %s\n", latitude);
-}
-
-int mainGPS(void)
-{
-   Init_GPS();
-
+gps_point* getPoint(){
    char* msg = "$PMTK183*38<CR><LF>";
    writeCmd(msg);
 
    //read result
-   //char* all_data = (char*) malloc(100);
    char all_data[100];
    getData(all_data);
-   printf("%s\n", all_data);
 
    GPSFlush();
 
-   return 0;
+   char* temp = strtok(all_data, ",");
+   char* longtitude, *latitude;
+   for (int i=0; i<5 && temp != NULL; i++){
+      longtitude = i==2? temp : longtitude;
+      latitude = i==4? temp : latitude;      
+      temp = strtok(NULL, ",");
+   }
 
+   double x = atof((const char*)longtitude);
+   double y = atof((const char*)latitude);
+
+   gps_point* p = malloc(sizeof(gps_point));
+   p->lon = x;
+   p->lat = y;
+
+   return p;
 }
