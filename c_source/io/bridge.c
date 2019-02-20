@@ -6,36 +6,38 @@
 
 #include "bridge.h"
 
-static int bridge_mmap_fd;
+static int dev_mem_fd;
 static void *virtual_base;
 
 static void onboard_bridge_init();
 static void graphics_bridge_init();
 static void gps_bridge_init();
 static void serial_bridge_init();
+static void wifi_bridge_init();
 
 void bridge_init() {
     // Open memory as if it were a device for read and write access
-    bridge_mmap_fd = open("/dev/mem", (O_RDWR | O_SYNC));
-    if (bridge_mmap_fd == -1) {
+    dev_mem_fd = open("/dev/mem", (O_RDWR | O_SYNC));
+    if (dev_mem_fd == -1) {
         printf("ERROR: could not open \"/dev/mem\"...\n");
         return NULL;
     }
 
     // map 2Mbyte of memory starting at 0xFF200000 to user space
-    virtual_base = mmap(NULL, HW_REGS_SPAN, (PROT_READ|PROT_WRITE), MAP_SHARED, bridge_mmap_fd, HW_REGS_BASE);
+    virtual_base = mmap(NULL, HW_REGS_SPAN, (PROT_READ|PROT_WRITE), MAP_SHARED, dev_mem_fd, HW_REGS_BASE);
 
     if (virtual_base == MAP_FAILED) {
         printf("ERROR: mmap() failed...\n");
-        close(bridge_mmap_fd);
+        close(dev_mem_fd);
         return NULL;
     }
 
     // initalize perherials mappings
-    onboard_bridge_init((unsigned int *) virtual_base);
-    graphics_bridge_init((unsigned int *) virtual_base);
-    gps_bridge_init((unsigned int *) virtual_base);
-    serial_bridge_init((unsigned int *) virtual_base);
+    onboard_bridge_init();
+    graphics_bridge_init();
+    gps_bridge_init();
+    serial_bridge_init();
+    wifi_bridge_init();
 }
 
 void bridge_close() {
@@ -43,9 +45,9 @@ void bridge_close() {
         printf("bridge_close: munmap() failed...\n");
     }
 
-    if (bridge_mmap_fd >= 0) {
-        close(bridge_mmap_fd);
-        bridge_mmap_fd = -1;
+    if (dev_mem_fd >= 0) {
+        close(dev_mem_fd);
+        dev_mem_fd = -1;
     }
 }
 
@@ -97,4 +99,19 @@ static void serial_bridge_init() {
     GPS_ScratchReg = 				  (unsigned int *) (virtual_base + (GPS_ScratchReg_PADDR & HW_REGS_MASK));
     GPS_DivisorLatchLSB =             (unsigned int *) (virtual_base + (GPS_DivisorLatchLSB_PADDR & HW_REGS_MASK));
     GPS_DivisorLatchMSB =             (unsigned int *) (virtual_base + (GPS_DivisorLatchMSB_PADDR & HW_REGS_MASK));
+}
+
+static void wifi_bridge_init() {
+    Wifi_ReceiverFifo =                 (unsigned int *) (virtual_base + (Wifi_ReceiverFifo_PADDR & HW_REGS_MASK));
+    Wifi_TransmitterFifo =              (unsigned int *) (virtual_base + (Wifi_TransmitterFifo_PADDR & HW_REGS_MASK));
+    Wifi_InterruptEnableReg =           (unsigned int *) (virtual_base + (Wifi_InterruptEnableReg_PADDR & HW_REGS_MASK));
+    Wifi_InterruptIdentificationReg =   (unsigned int *) (virtual_base + (Wifi_InterruptIdentificationReg_PADDR & HW_REGS_MASK));
+    Wifi_FifoControlReg =               (unsigned int *) (virtual_base + (Wifi_FifoControlReg_PADDR & HW_REGS_MASK));
+    Wifi_LineControlReg =               (unsigned int *) (virtual_base + (Wifi_LineControlReg_PADDR & HW_REGS_MASK));
+    Wifi_ModemControlReg =              (unsigned int *) (virtual_base + (Wifi_ModemControlReg_PADDR & HW_REGS_MASK));
+    Wifi_LineStatusReg =                (unsigned int *) (virtual_base + (Wifi_LineStatusReg_PADDR & HW_REGS_MASK));
+    Wifi_ModemStatusReg =               (unsigned int *) (virtual_base + (Wifi_ModemStatusReg_PADDR & HW_REGS_MASK));
+    Wifi_ScratchReg =                   (unsigned int *) (virtual_base + (Wifi_ScratchReg_PADDR & HW_REGS_MASK));
+    Wifi_DivisorLatchLSB =              (unsigned int *) (virtual_base + (Wifi_DivisorLatchLSB_PADDR & HW_REGS_MASK));
+    Wifi_DivisorLatchMSB =              (unsigned int *) (virtual_base + (Wifi_DivisorLatchMSB_PADDR & HW_REGS_MASK));
 }

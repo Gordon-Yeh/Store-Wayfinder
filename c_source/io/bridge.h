@@ -109,6 +109,34 @@ volatile unsigned short int *GPS_DivisorLatchLSB;
 volatile unsigned short int *GPS_DivisorLatchMSB;
 
 /* ========================================================================== */
+/* ================ Wifi ===================================================== */
+#define Wifi_ReceiverFifo_PADDR                 0xff210240
+#define Wifi_TransmitterFifo_PADDR              0xff210240
+#define Wifi_InterruptEnableReg_PADDR           0xff210242
+#define Wifi_InterruptIdentificationReg_PADDR   0xff210244
+#define Wifi_FifoControlReg_PADDR               0xff210244
+#define Wifi_LineControlReg_PADDR               0xff210246
+#define Wifi_ModemControlReg_PADDR              0xff210248
+#define Wifi_LineStatusReg_PADDR                0xff21024a
+#define Wifi_ModemStatusReg_PADDR               0xff21024c
+#define Wifi_ScratchReg_PADDR                   0xff21024e
+#define Wifi_DivisorLatchLSB_PADDR              0xff210240
+#define Wifi_DivisorLatchMSB_PADDR              0xff210242
+
+volatile unsigned short int *Wifi_ReceiverFifo;
+volatile unsigned short int *Wifi_TransmitterFifo;
+volatile unsigned short int *Wifi_InterruptEnableReg;
+volatile unsigned short int *Wifi_InterruptIdentificationReg;
+volatile unsigned short int *Wifi_FifoControlReg;
+volatile unsigned short int *Wifi_LineControlReg;
+volatile unsigned short int *Wifi_ModemControlReg;
+volatile unsigned short int *Wifi_LineStatusReg;
+volatile unsigned short int *Wifi_ModemStatusReg;
+volatile unsigned short int *Wifi_ScratchReg;
+volatile unsigned short int *Wifi_DivisorLatchLSB;
+volatile unsigned short int *Wifi_DivisorLatchMSB;
+
+/* ========================================================================== */
 /**
  * initalize and set up the virtual addresses, call before accessing them
  */
