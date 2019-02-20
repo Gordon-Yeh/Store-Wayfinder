@@ -16,6 +16,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "GPS.h"
+
 void Init_GPS(void)
 {
    // set bit 7 of Line Control Register to 1, to gain access to the baud rate registers
@@ -97,7 +99,7 @@ void GPSFlush(void)
    return; // no more characters so return
 }
 
-void getCoordinate(char all_data[100], char longtitude[20], char latitude[20]){
+gps_point getCoordinate(char all_data[100], char longtitude[20], char latitude[20]){
    char* temp = strtok(all_data, ",");
    for (int i=0; i<6 && temp != NULL; i++){
       longtitude = i==2? temp : longtitude;
@@ -109,8 +111,8 @@ void getCoordinate(char all_data[100], char longtitude[20], char latitude[20]){
    }
    printf("long: %s\n", longtitude);
    printf("lat: %s\n", latitude);
-
 }
+
 int mainGPS(void)
 {
    Init_GPS();
