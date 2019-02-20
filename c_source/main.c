@@ -1,6 +1,10 @@
 #include "Graphics/gui.h"
 #include "io/bridge.h"
+#include "app.h"
 
+/**
+ * do required initalization before running the app
+ */
 int sys_init()
 {
     bridge_init();
@@ -8,6 +12,7 @@ int sys_init()
 
 int main(void)
 {
-	gui_start();
+    sys_init();
+    app_start();
     return 0;
 }
