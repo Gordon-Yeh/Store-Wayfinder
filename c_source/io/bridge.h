@@ -62,7 +62,7 @@ volatile unsigned short int *RS232_DivisorLatchMSB;
 
 /* =========================================================================== */
 /* ================ TOUCHSCREEN ============================================== */
-#define GraphicsCommandRegD_PADDR          0xff210000
+#define GraphicsCommandReg_PADDR           0xff210000
 #define GraphicsStatusReg_PADDR            0xff210000
 #define GraphicsX1Reg_PADDR                0xff210002
 #define GraphicsY1Reg_PADDR                0xff210004
@@ -82,18 +82,18 @@ volatile unsigned short int *GraphicsBackGroundColourReg;
 
 /* ========================================================================== */
 /* ================ GPS ===================================================== */
-#define GPS_ReceiverFifo                0xff210200
-#define GPS_TransmitterFifo             0xff210200
-#define GPS_InterruptEnableReg          0xff210202
-#define GPS_InterruptIdentificationReg  0xff210204
-#define GPS_FifoControlReg              0xff210204
-#define GPS_LineControlReg              0xff210206
-#define GPS_ModemControlReg             0xff210208
-#define GPS_LineStatusReg               0xff21020a
-#define GPS_ModemStatusReg              0xff21020c
-#define GPS_ScratchReg                  0xff21020e
-#define GPS_DivisorLatchLSB             0xff210200
-#define GPS_DivisorLatchMSB             0xff210202
+#define GPS_ReceiverFifo_PADDR                0xff210200
+#define GPS_TransmitterFifo_PADDR             0xff210200
+#define GPS_InterruptEnableReg_PADDR          0xff210202
+#define GPS_InterruptIdentificationReg_PADDR  0xff210204
+#define GPS_FifoControlReg_PADDR              0xff210204
+#define GPS_LineControlReg_PADDR              0xff210206
+#define GPS_ModemControlReg_PADDR             0xff210208
+#define GPS_LineStatusReg_PADDR               0xff21020a
+#define GPS_ModemStatusReg_PADDR              0xff21020c
+#define GPS_ScratchReg_PADDR                  0xff21020e
+#define GPS_DivisorLatchLSB_PADDR             0xff210200
+#define GPS_DivisorLatchMSB_PADDR             0xff210202
 
 volatile unsigned short int *GPS_ReceiverFifo;
 volatile unsigned short int *GPS_TransmitterFifo;
