@@ -64,7 +64,7 @@ screen_t homescreen_listen() {
 			//Keep using the current item_list
             return CATEGORIES;
         } else if (textbox_within(_HomeScreen.map_button, pr)) {
-            // TODO:
+            return MAP;
         } else if (textbox_within(_HomeScreen.help_button, pr)) {
             // TODO:
         }

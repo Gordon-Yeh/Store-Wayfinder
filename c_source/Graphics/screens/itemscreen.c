@@ -93,20 +93,34 @@ screen_t item_screen_listen(void) {
 		else if (textbox_within(_ItemScreen.map_button, pr)) {
             return MAP;
         }
+		else if (within_box(prev_page, pr)) {
+			//	Cannot have a pagenum less than 0
+			if(pagenum > 0) {
+				pagenum--;
+				return ITEM_SIDEBAR;
+			}
+		}
+		else if (within_box(next_page, pr)) {
+			// Cannot have a pagenum greater than the (number of items - 1)/ pagesize rounded down
+			if(pagenum < (item_list_size - 1)/pagesize) {
+				pagenum++;
+				return ITEM_SIDEBAR;
+			}
+		}
 		else {
 			//look through each item button to see if we add the item
 			for(int i = 0; i < _ItemScreen.num_items; i++) {
 				//Limit the number of items to 7 for now
 				if(textbox_within(_ItemScreen.item_buttons[i], pr)) {
 					add_to_item_list(_ItemScreen.item_buttons[i]->text);
-					return ITEM;
+					return ITEM_SIDEBAR;
 				}
 			}
 			//look through each item delete_button to see if we delete the item
 			for(int j = 0; j < item_list_size; j++) {
 				if(textbox_within(item_list[j]->delete_textbox, pr)) {
 					remove_from_item_list(j);
-					return ITEM;
+					return ITEM_SIDEBAR;
 				}
 			}
 		}

@@ -1,10 +1,11 @@
+#include <stdio.h>
 #include "../Globalvars.h"
 #include "../Colours.h"
 #include "../Text.h"
+#include "../draw/DrawImages.h"
 #include "../shapes/box.h"
 #include "../item/item.h"
 
-//MUST CALL SIDEBARLIST EVERYTIME A CHANGE IS MADE TO ITEM_LIST
 void sidebarlist_draw(void) {
 	Box * your_list_box = create_box(542, 6, 252, 474, BLUE, FOREST_GREEN);
 	draw_box(your_list_box);
@@ -18,4 +19,11 @@ void sidebarlist_draw(void) {
 		textbox_draw(item_list[i]->delete_textbox);
 		textbox_draw(item_list[i]->delete_icon);
 	}
+	
+	char s_pgnm[3];
+	sprintf(s_pgnm, "%d", pagenum+1);
+	CenteredSentence(FONT2, 542, 793, 426, 475, WHITE, 0, s_pgnm, DONT_ERASE);
+	
+	BackArrow(574, 426, WHITE);
+	NextArrow(715, 426, WHITE);
 }
