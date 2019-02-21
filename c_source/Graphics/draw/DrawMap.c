@@ -6,9 +6,9 @@
  */
 #include <string.h>
 
-#include "draw/draw.h"
-#include "Defines.h"
-#include "Colours.h"
+#include "draw.h"
+#include "../Defines.h"
+#include "../Colours.h"
 #include "DrawMap.h"
 
 //Draws the map image at the given coordinates - 518x418 pixels
