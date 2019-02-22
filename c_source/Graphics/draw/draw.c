@@ -6,15 +6,6 @@
 //NOTE: (20, 0) is top left, (799, 479) is bottom right
 // graphics register addresses
 
-// #define *GraphicsCommandReg   		(*(volatile unsigned short int *)(0xFF210000))
-// #define *GraphicsStatusReg   		(*(volatile unsigned short int *)(0xFF210000))
-// #define *GraphicsX1Reg   			(*(volatile unsigned short int *)(0xFF210002))
-// #define *GraphicsY1Reg   			(*(volatile unsigned short int *)(0xFF210004))
-// #define *GraphicsX2Reg   			(*(volatile unsigned short int *)(0xFF210006))
-// #define *GraphicsY2Reg   			(*(volatile unsigned short int *)(0xFF210008))
-// #define *GraphicsColourReg   		(*(volatile unsigned short int *)(0xFF21000E))
-// #define *GraphicsBackGroundColourReg   	(*(volatile unsigned short int *)(0xFF210010))
-
 /************************************************************************************************
 ** This macro pauses until the graphics chip status register indicates that it is idle
 ***********************************************************************************************/
