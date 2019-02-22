@@ -12,19 +12,6 @@
 #include "Wifi.h"
 #include "../io/bridge.h"
 
-// #define *Wifi_ReceiverFifo (*(volatile unsigned char *)(0xFF210240))
-// #define *Wifi_TransmitterFifo (*(volatile unsigned char *)(0xFF210240))
-// #define *Wifi_InterruptEnableReg (*(volatile unsigned char *)(0xFF210242))
-// #define *Wifi_InterruptIdentificationReg (*(volatile unsigned char *)(0xFF210244))
-// #define *Wifi_FifoControlReg (*(volatile unsigned char *)(0xFF210244))
-// #define *Wifi_LineControlReg (*(volatile unsigned char *)(0xFF210246))
-// #define *Wifi_ModemControlReg (*(volatile unsigned char *)(0xFF210248))
-// #define *Wifi_LineStatusReg (*(volatile unsigned char *)(0xFF21024A))
-// #define *Wifi_ModemStatusReg (*(volatile unsigned char *)(0xFF21024C))
-// #define *Wifi_ScratchReg (*(volatile unsigned char *)(0xFF21024E))
-// #define *Wifi_DivisorLatchLSB (*(volatile unsigned char *)(0xFF210240))
-// #define *Wifi_DivisorLatchMSB (*(volatile unsigned char *)(0xFF210242))
-
 /*
  * Puts character into Transmitter Fifo so it can be read by wifi module
  */
