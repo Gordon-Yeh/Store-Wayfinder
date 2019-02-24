@@ -16,7 +16,7 @@ def db_init():
         database = database
     )
     cursor = db.cursor()
-    retutn cursor
+    return cursor
 
 #search the db to get the 
 def search_name(cursor, keyword):
