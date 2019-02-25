@@ -1,6 +1,9 @@
 import cv2
 import numpy as np
 import serial
+import time
+from picamera.array import PiRGBArray
+from picamera import PiCamera
 
 def mapObjectPosition(x,y):
    print("Object center coordinates at X = {0}, Y = {1}".format(x,y))
@@ -17,12 +20,23 @@ def main():
         bytesize=serial.EIGHTBITS,
         timeout=1
    )
-
+   #initialize the camera
+   camera = PiCamera()
+   rawCapture = PiRBGArray(camera)
+   
+   #warm up the camera
+   time.sleep(0.1)
+   
    #read the picture - 1 means we want the image in BGR
-   img = cv2.imread('image.jpg', 1)
+   camera.capture(rawCapture, 1)
+   img = rawCapture.array
 
+   
    #resize the image to 20% in each axis
    img = cv2.resize(img, (0,0), fx=0.2, fy=0.2)
+   
+   cv2.imshow("Image", img)
+   cv2.waitKey(0)
 
    #convert to HSV image
    hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
