@@ -41,16 +41,17 @@ def main():
    #convert to HSV image
    hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
 
-   blue = 0
-   green = 0
-   red = 255
+   #blue = 0
+   #green = 0
+   #red = 255
 
-   color = np.uint8([[[blue, green, red]]])
-   hsv_color = cv2.cvtColor(color, cv2.COLOR_BGR2HSV)
+   #color = np.uint8([[[blue, green, red]]])
+   #hsv_color = cv2.cvtColor(color, cv2.COLOR_BGR2HSV)
    #hue = hsv_color[0][0][0]
    #print(str(hue-10))
    #print(str(hue+10))
-
+   
+   #we use yellow color to identify the deviceß
    lower_range = np.array([24, 100, 100], dtype=np.uint8)
    upper_range = np.array([44, 255, 255], dtype=np.uint8)
 
@@ -79,11 +80,7 @@ def main():
         ser.write(str.encode('X = %d'%(x)))
 
    cv2.imshow("img", img)
-   
-   while(1):
-    k = cv2.waitKey(0)
-    if(k==27):
-      break
+   time.sleep(3)
 
    cv2.destroyAllWindows()
 
