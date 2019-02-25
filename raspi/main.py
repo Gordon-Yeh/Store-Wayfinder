@@ -1,8 +1,8 @@
-from serial import *
+#from serial import *
 from pi_mysql import *
+from serial_comm import *
+import time
 
-if __name__ == '__main__':
-    main()
 
 def main():
     ser = serial_init()
@@ -21,3 +21,7 @@ def main():
             #TODO: take and process picture
             item_x, item_y = search_name(cursor, req)
             ser.write(item_x+","+item_y)
+
+
+if __name__ == '__main__':
+    main()

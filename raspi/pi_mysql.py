@@ -9,7 +9,7 @@
 
 #"python -m pip install mysql-connector" to install the db connector
 import sys
-sys.path.insert(0, "/home/pi/.local/lib/python2.7/sitepackages/mysql")
+sys.path.insert(0, "/usr/local/lib/python2.7/dist-packages/mysql")
 import connector
 
 host = 'cpen391.cpyc6b2epdjj.us-west-1.rds.amazonaws.com'
@@ -18,7 +18,7 @@ password = 'bairiyishanjin'
 database = 'cpen391'
 
 def db_init():
-    db = mysql.connector.Connect(
+    db = connector.Connect(
         host = host,
         user = user,
         passwd = password,

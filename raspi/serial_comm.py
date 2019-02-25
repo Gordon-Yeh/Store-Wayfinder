@@ -10,8 +10,10 @@ Expects requests to include fields below seperated by coma:
 """
 import time
 import serial
-import json 
-import pi_mysql as mysql
+import sys
+
+#from serial import Serial
+
 
     
 def serial_init():
@@ -25,20 +27,7 @@ def serial_init():
     )
     return ser
 
-# def mainSerial():
-#     ser = serial_init()
-#     cursor = mysql.db_init()
-#     while 1:
-#         data = ser.readline()
-#         if(data != ""):
-#             req = json.load(data)
-#             kw = req["kw"]
-#             if (req["t"] == "n"):
-#                 result = mysql.search_name(cursor, kw) #return the coordinate
-#             else:
-#                 result = mysql.search_cat(cursor,kw)
-#             time.sleep(0.5)
-#             ser.write(result)
+serial_init();
 
 
 
