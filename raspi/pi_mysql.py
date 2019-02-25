@@ -28,9 +28,9 @@ class DB(object):
         self.cursor = self.conn.cursor()
 
     def search_name(self, keyword):
-        self.cursor.execute("SELECT x FROM Items WHERE name="+ keyword + ";")
+        self.cursor.execute("SELECT x FROM Items WHERE name='"+ keyword + "';")
         x = self.cursor.fetchall()
-        self.cursor.execute("SELECT y FROM Items WHERE name="+ keyword + ";")
+        self.cursor.execute('SELECT y FROM Items WHERE name="'+ keyword + '";')
         y = self.cursor.fetchall()
         return x, y
 
