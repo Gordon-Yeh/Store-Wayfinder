@@ -14,20 +14,28 @@ import sys
 
 #from serial import Serial
 
+class S(object):
+    def __init__(self):
+        self.port = serial.Serial(
+            port = '/dev/serial0',
+            baudrate = 115200,
+            parity = serial.PARITY_NONE,
+            stopbits = serial.STOPBITS_ONE,
+            bytesize = serial.EIGHTBITS,
+            timeout = 1
+        )
 
     
-def serial_init():
-    ser = serial.Serial(
-        port = '/dev/serial0',
-        baudrate = 115200,
-        parity = serial.PARITY_NONE,
-        stopbits = serial.STOPBITS_ONE,
-        bytesize = serial.EIGHTBITS,
-        timeout = 1
-    )
-    return ser
-
-serial_init();
+# def serial_init():
+#     ser = serial.Serial(
+#         port = '/dev/serial0',
+#         baudrate = 115200,
+#         parity = serial.PARITY_NONE,
+#         stopbits = serial.STOPBITS_ONE,
+#         bytesize = serial.EIGHTBITS,
+#         timeout = 1
+#     )
+#     return ser
 
 
 

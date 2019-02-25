@@ -1,16 +1,16 @@
 #from serial import *
-from pi_mysql import *
-from serial_comm import *
+from pi_mysql import DB
+from serial_comm import S
 import time
 
 
 def main():
-    ser = serial_init()
-    cursor = db_init()
+    ser = S()
+    db = DB()
 
     # TODO: format of input data
     while 1:
-        req = ser.readline()
+        req = ser.port.readline()
         if (req != ""):
             """parse data --> query db --> send back the result
                 (here assuming req is the name of the item to search)
@@ -19,9 +19,5 @@ def main():
             """ 
 
             #TODO: take and process picture
-            item_x, item_y = search_name(cursor, req)
+            item_x, item_y = db.search_name(req)
             ser.write(item_x+","+item_y)
-
-
-if __name__ == '__main__':
-    main()

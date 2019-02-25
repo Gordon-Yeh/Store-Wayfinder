@@ -17,15 +17,32 @@ user = 'root'
 password = 'bairiyishanjin'
 database = 'cpen391'
 
-def db_init():
-    db = connector.Connect(
-        host = host,
-        user = user,
-        passwd = password,
-        database = database
-    )
-    cursor = db.cursor()
-    return cursor
+class DB(object):
+    def __init__(self):
+        self.conn = connector.Connect(
+            host = host,
+            user = user,
+            passwd = password,
+            database = database
+        )
+        self.cursor = self.conn.cursor()
+
+    def search_name(self, keyword):
+        self.cursor.execute("SELECT x FROM Items WHERE name="+ keyword + ";")
+        x = self.cursor.fetchall()
+        self.cursor.execute("SELECT y FROM Items WHERE name="+ keyword + ";")
+        y = self.cursor.fetchall()
+        return x, y
+
+# def db_init():
+#     db = connector.Connect(
+#         host = host,
+#         user = user,
+#         passwd = password,
+#         database = database
+#     )
+#     cursor = db.cursor()
+#     return cursor
 
 #search the db to get the 
 def search_name(cursor, keyword):
