@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "io/bridge.h"
+#include "../io/bridge.h"
 #include "GPS.h"
 
 void Init_GPS(void)

@@ -137,6 +137,34 @@ volatile unsigned short int *Wifi_DivisorLatchLSB;
 volatile unsigned short int *Wifi_DivisorLatchMSB;
 
 /* ========================================================================== */
+/* ================ Touch Screen ============================================ */
+#define TS_ReceiverFifo_PADDR 				    0xFF210230
+#define TS_TransmitterFifo_PADDR 				0xFF210230
+#define TS_InterruptEnableReg_PADDR 			0xFF210232
+#define TS_InterruptIdentificationReg_PADDR 	0xFF210234
+#define TS_FifoControlReg_PADDR 				0xFF210234
+#define TS_LineControlReg_PADDR 				0xFF210236
+#define TS_ModemControlReg_PADDR				0xFF210238
+#define TS_LineStatusReg_PADDR 				    0xFF21023A
+#define TS_ModemStatusReg_PADDR 				0xFF21023C
+#define TS_ScratchReg_PADDR 					0xFF21023E
+#define TS_DivisorLatchLSB_PADDR 				0xFF210230
+#define TS_DivisorLatchMSB_PADDR 				0xFF210232
+
+volatile unsigned short int *TS_ReceiverFifo;
+volatile unsigned short int *TS_TransmitterFifo;
+volatile unsigned short int *TS_InterruptEnableReg;
+volatile unsigned short int *TS_InterruptIdentificationReg;
+volatile unsigned short int *TS_FifoControlReg;
+volatile unsigned short int *TS_LineControlReg;
+volatile unsigned short int *TS_ModemControlReg;
+volatile unsigned short int *TS_LineStatusReg;
+volatile unsigned short int *TS_ModemStatusReg;
+volatile unsigned short int *TS_ScratchReg;
+volatile unsigned short int *TS_DivisorLatchLSB;
+volatile unsigned short int *TS_DivisorLatchMSB;
+
+/* ========================================================================== */
 /**
  * initalize and set up the virtual addresses, call before accessing them
  */

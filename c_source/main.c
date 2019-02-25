@@ -8,6 +8,7 @@ int sys_init()
 
 int main(void)
 {
+	sys_init();
 	gui_start();
     return 0;
 }
