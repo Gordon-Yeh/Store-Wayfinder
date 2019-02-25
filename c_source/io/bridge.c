@@ -73,7 +73,7 @@ static void graphics_bridge_init() {
     GraphicsBackGroundColourReg = (unsigned short int *) (virtual_base + (GraphicsBackGroundColourReg_PADDR & HW_REGS_MASK));
 }
 
-static void gps_bridge_init() {
+static void serial_bridge_init() {
     RS232_ReceiverFifo = 				(unsigned short int *) (virtual_base + (RS232_ReceiverFifo_PADDR & HW_REGS_MASK));
     RS232_TransmitterFifo = 			(unsigned short int *) (virtual_base + (RS232_TransmitterFifo_PADDR & HW_REGS_MASK));
     RS232_InterruptEnableReg = 			(unsigned short int *) (virtual_base + (RS232_InterruptEnableReg_PADDR & HW_REGS_MASK));
@@ -88,7 +88,7 @@ static void gps_bridge_init() {
     RS232_DivisorLatchMSB = 			(unsigned short int *) (virtual_base + (RS232_DivisorLatchMSB_PADDR & HW_REGS_MASK));
 }
 
-static void serial_bridge_init() {
+static void gps_bridge_init() {
     GPS_ReceiverFifo = 				  (unsigned short int *) (virtual_base + (GPS_ReceiverFifo_PADDR & HW_REGS_MASK));
     GPS_TransmitterFifo = 		      (unsigned short int *) (virtual_base + (GPS_TransmitterFifo_PADDR & HW_REGS_MASK));
     GPS_InterruptEnableReg = 	      (unsigned short int *) (virtual_base + (GPS_InterruptEnableReg_PADDR & HW_REGS_MASK));
