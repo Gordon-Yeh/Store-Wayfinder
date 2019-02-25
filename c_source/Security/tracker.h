@@ -10,17 +10,13 @@
 #define IN_BOUND 0
 #define OUT_OF_BOUND 1
 
-typedef struct {
-    double x;
-    double y;   
-} gps_point;
-
 /**
  * start the tracker concurrently
+ * LED0 will light up to indicate it's running
  * @param update_rate - rate at which the location updates (in ms)
  * @return 1 - if successfully starts, 0 - otherwise
  */
-int tracker_start(int update_rate);
+int tracker_start(float min_lon, float max_lon, float min_lat, float max_lat, unsigned int update_rate);
 
 /**
  * @returns the location status of the device
