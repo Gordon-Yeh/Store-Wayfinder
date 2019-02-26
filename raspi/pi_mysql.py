@@ -37,6 +37,10 @@ class DB(object):
         y = self.cursor.fetchone()[0]
         
         return x, y
+    def search_cat(self, keyword):
+        query = "SELECT name FROM Items WHERE category='"+keyword[:-2]+"';";
+        self.cursor.execute(query)
+        return self.cursor.fetchall()
 
 # def db_init():
 #     db = connector.Connect(
