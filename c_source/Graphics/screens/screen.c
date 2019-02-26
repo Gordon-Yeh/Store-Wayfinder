@@ -7,6 +7,7 @@
 #include "categories_screen.h"
 #include "itemscreen.h"
 #include "mapscreen.h"
+#include "helpscreen.h"
 
 #include "../widgets/widgets.h"
 
@@ -20,12 +21,8 @@ void reset_screen() {
 void screen_init() {
     homescreen_init();
     categories_screen_init();
-	//item_screen_init(); //changing
 	map_screen_init();
-	//help_screen_init();
-	//antitheft_screen_init();
-	
-    // TODO: call other screen init functions here
+	help_screen_init();
 }
 
 void screen_draw(screen_t screen) {
@@ -59,6 +56,10 @@ void screen_draw(screen_t screen) {
 			plot_items();
 			sidebarlist_draw();
 		} break;
+		case HELP: {
+			reset_screen();
+			help_screen_draw();
+		} break;
 		
         // TODO: add more screens
         default: {
@@ -86,12 +87,18 @@ screen_t screen_listen(screen_t curr_screen) {
 		} break;
 		case ITEM_SIDEBAR: {
 			next_screen = item_screen_listen();
+			// Free the item_screen memory unless we're only updating the sidebar
+			if(next_screen != ITEM_SIDEBAR)
+				item_screen_destroy();
 		} break;
 		case MAP: {
 			next_screen = map_screen_listen();
 		} break;
 		case MAP_SIDEBAR: {
 			next_screen = map_screen_listen();
+		} break;
+		case HELP: {
+			next_screen = help_screen_listen();
 		} break;
 		
         // TODO: add more screens
