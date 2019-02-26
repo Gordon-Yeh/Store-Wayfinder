@@ -18,10 +18,10 @@ static struct {
 
 void homescreen_init() {
     // declare and set all shapes and components on the screen here
-    TextBox * new_list_button = textbox_create(30, 10, 760, 100);
-	TextBox * add_to_list_button = textbox_create(30, 120, 760, 110);
-	TextBox * map_button = textbox_create(30, 240, 760, 110);
-	TextBox * help_button = textbox_create(30, 360, 760, 110);
+    TextBox * new_list_button = textbox_create(30, 60, 760, 95);
+	TextBox * add_to_list_button = textbox_create(30, 165, 760, 95);
+	TextBox * map_button = textbox_create(30, 270, 760, 95);
+	TextBox * help_button = textbox_create(30, 375, 760, 95);
 
 	textbox_set_box_colour(new_list_button, BLUE, FOREST_GREEN);
 	textbox_set_box_colour(add_to_list_button, BLUE, FOREST_GREEN);
@@ -40,6 +40,7 @@ void homescreen_init() {
 }
 
 void homescreen_draw() {
+	CenteredSentence(FONT2, 30, 789, 0, 55, FOREST_GREEN, 0, "Hardware Store Wayfinder", DONT_ERASE);
     textbox_draw(_HomeScreen.new_list_button);
 	textbox_draw(_HomeScreen.add_to_list_button);
 	textbox_draw(_HomeScreen.map_button);
@@ -66,7 +67,7 @@ screen_t homescreen_listen() {
         } else if (textbox_within(_HomeScreen.map_button, pr)) {
             return MAP;
         } else if (textbox_within(_HomeScreen.help_button, pr)) {
-            // TODO:
+            return HELP;
         }
 	}
 }

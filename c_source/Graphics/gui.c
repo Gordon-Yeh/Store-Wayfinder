@@ -13,7 +13,7 @@
 char *cur_category;
 
 int item_list_size = 0;
-Item * item_list[30];
+Item * item_list[100];
 int pagenum = 0;
 const int pagesize = 7;
 
@@ -35,8 +35,8 @@ int gui_start() {
 	Init_Touch();
 	
 	// Initialize global box variables
-	prev_page = create_box(574, 426, 50, 50, FOREST_GREEN, FOREST_GREEN);
-	next_page = create_box(715, 426, 50, 50, FOREST_GREEN, FOREST_GREEN);
+	prev_page = create_box(564, 426, 50, 50, FOREST_GREEN, FOREST_GREEN);
+	next_page = create_box(725, 426, 50, 50, FOREST_GREEN, FOREST_GREEN);
 	
     screen_init();
 
