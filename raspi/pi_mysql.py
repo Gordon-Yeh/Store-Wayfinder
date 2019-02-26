@@ -28,10 +28,14 @@ class DB(object):
         self.cursor = self.conn.cursor()
 
     def search_name(self, keyword):
-        self.cursor.execute("SELECT x FROM Items WHERE name='"+ keyword + "';")
-        x = self.cursor.fetchall()
-        self.cursor.execute('SELECT y FROM Items WHERE name="'+ keyword + '";')
-        y = self.cursor.fetchall()
+        
+        query_x = "SELECT x FROM Items WHERE name='"+keyword[:-2]+"';"
+        query_y = "SELECT y FROM Items WHERE name='"+keyword[:-2]+"';"
+        self.cursor.execute(query_x)
+        x = self.cursor.fetchone()[0]
+        self.cursor.execute(query_y)
+        y = self.cursor.fetchone()[0]
+        
         return x, y
 
 # def db_init():

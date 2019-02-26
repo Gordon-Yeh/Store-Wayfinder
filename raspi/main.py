@@ -20,8 +20,7 @@ def main():
 
             #TODO: take and process picture
             item_x, item_y = db.search_name(req)
-            print(item_x+","+item_y)
-            ser.port.write(str.encode(item_x+","+item_y))
+            ser.port.write(str.encode(str(item_x)+","+str(item_y)))
             
 if __name__ == "__main__":
     main()
