@@ -11,9 +11,11 @@
 extern const unsigned char Next_Arrow[];
 extern const unsigned char Back_Arrow[];
 extern const unsigned char Small_Circle[];
+extern const unsigned char Walking_Person[];
 
 void NextArrow(int x, int y, int colour);
 void BackArrow(int x, int y, int colour);
 void Circle(int x, int y, int colour);
+void Person(int x, int y, int colour);
 
 #endif /* DRAWIMAGES_H_ */
