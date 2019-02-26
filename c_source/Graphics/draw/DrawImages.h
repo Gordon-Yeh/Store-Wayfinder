@@ -16,6 +16,6 @@ extern const unsigned char Walking_Person[];
 void NextArrow(int x, int y, int colour);
 void BackArrow(int x, int y, int colour);
 void Circle(int x, int y, int colour);
-void Person(int x, int y, int colour);
+void Person(int screenx, int screeny, int x, int y, int colour);
 
 #endif /* DRAWIMAGES_H_ */
