@@ -29,7 +29,7 @@ def main():
    time.sleep(0.1)
    
    #read the picture
-   camera.capture('foo1.jpg')
+   camera.capture('foo1.jpg',resize=(500,370))
    #img = rawCapture.array
 
    
@@ -38,10 +38,10 @@ def main():
 #   cv2.waitKey(0)
    #hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
    #resize the image to 20% in each axis
-   img = cv2.resize(img, (0,0), fx=0.2, fy=0.2)
+#   img = cv2.resize(img, (0,0), fx=0.2, fy=0.2)
    
-#   cv2.imshow("Image", img)
-#   cv2.waitKey(0)
+   cv2.imshow("Image", img)
+   cv2.waitKey(0)
 
    #convert to HSV image
    hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
@@ -64,8 +64,8 @@ def main():
 #   mask = cv2.erode(mask, None, iterations=2)
 #   mask = cv2.dilate(mask, None, iterations=2)
 
-#   cv2.imshow("img", mask)
-#   cv2.waitKey(0)
+   cv2.imshow("img", mask)
+   cv2.waitKey(0)
 
    cnts = cv2.findContours(mask.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
    cnts = cnts[1]
