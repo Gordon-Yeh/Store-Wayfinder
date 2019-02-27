@@ -11,7 +11,7 @@ Point * parse_postion_string(char * str) {
 
     Point * p = malloc(sizeof(Point));
 
-    x_str = strtok(position_str, DELIMITER);
+    x_str = strtok(str, DELIMITER);
     y_str = strtok(NULL, DELIMITER);
 
     p->x = atoi(x_str);

@@ -3,6 +3,7 @@
 #include <string.h>
 #include <time.h>
 
+#include "../GPS/GPS.h"
 #include "tests.h"
 
 void test_bt1() {
