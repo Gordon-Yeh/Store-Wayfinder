@@ -9,28 +9,30 @@ def main():
     db = DB()
     cam = Camera()
 
-    # TODO: format of input data
     while 1:
+        pos_x, pos_y = cam.snapshot()
+        print(pos_y)
+        time.sleep(1)
         req = ser.port.readline().decode("utf-8")
-
         query_type = req.split(",")[0]
         if (query_type == "p"):
-            kw = req.split(",")[1]
-            #item_x, item_y = db.search_name(kw)
             pos_x, pos_y = cam.snapshot()
-            ser.port.write(str(pos_x)+","+str(pos_y)+"@@")
+            result = "@"+str(pos_x)+","+str(pos_y)+"?"
+            ser.port.write(result.encode())
 
         # "c" indicating it's a valid user input requesting name and coordingantes in a certain category
         if (query_type == "c"):
             kw = req.split(",")[1]
             entries = db.search(kw)
+            ser.port.write(str("@").encode())
             for entry in entries:
                 print(entry[0])
-                name = entry[0].encode()
-                x = str(entry[1]).encode()
-                y = str(entry[2]).encode()
-                ser.port.write(name+"<"+x+">"+y+",")
-            ser.port.write("?")
+                name = entry[0]
+                x = str(entry[1])
+                y = str(entry[2])
+                msg = name+"<"+x+">"+y+","
+                ser.port.write(msg.encode())
+            ser.port.write(str("?").encode())
             
 if __name__ == "__main__":
     main()

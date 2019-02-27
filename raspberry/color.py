@@ -10,7 +10,7 @@ class Camera:
         time.sleep(0.1)
     def snapshot(self):
         #read the picture
-        self.cam.capture('foo1.jpg',resize=(500,370))
+        self.cam.capture('foo1.jpg',resize=(518,418))
    #img = rawCapture.array
 
    
@@ -21,7 +21,7 @@ class Camera:
    #convert to HSV image
         hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
    
-   #we use yellow color to identify the deviceß
+   #we use yellow color to identify the device
         lower_range = np.array([24, 100, 100], dtype=np.uint8)
         upper_range = np.array([44, 255, 255], dtype=np.uint8)
 
@@ -38,6 +38,8 @@ class Camera:
             c = max(cnts, key=cv2.contourArea)
             ((x,y),radius) = cv2.minEnclosingCircle(c)
             M = cv2.moments(c)
+            if M["m00"] == 0:
+                return -2,-2
             center = (int(M["m10"]/M["m00"]), int(M["m01"]/M["m00"]))
 
             if radius > 0:
@@ -46,5 +48,5 @@ class Camera:
                 return int(x), int(y)
                 #return x, y
    
-
+        return -1,-1
 

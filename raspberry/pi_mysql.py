@@ -43,7 +43,7 @@ class DB(object):
         return self.cursor.fetchall()
 
     def search(self, category):
-        query = "SELECT name, x, y FROM Items WHERE category='"+category+"';";
+        query = "SELECT name, x, y FROM Items WHERE category='"+category[:-2]+"';";
         self.cursor.execute(query)
         return self.cursor.fetchall()
 
