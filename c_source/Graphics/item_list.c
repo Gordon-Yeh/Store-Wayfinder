@@ -2,6 +2,7 @@
 #include "Colours.h"
 #include "Text.h"
 #include "components/textbox.h"
+#include "item/item.h"
 #include "shapes/box.h"
 
 // For the item delete_box
@@ -18,7 +19,7 @@ static const int di_base_y = 65;
 static const int di_box_length = 40; //x
 static const int di_box_width = 40; //y
 
-void add_to_item_list(char *item_name) {
+void add_to_item_list(Item *display_item) {
 	//TODO: find the item from the database and create a new item to put in the item_list array
 	
 	//ie. if item_list_size == 3, 3 items in array already, so insert an item into the 3rd index, row = 3
@@ -34,7 +35,7 @@ void add_to_item_list(char *item_name) {
 		d_button_width);
 
 	textbox_set_box_colour(db, BLUE, WHITE);
-	textbox_set_text(db, item_name, FONT2, FOREST_GREEN);
+	textbox_set_text(db, display_item->name, FONT2, FOREST_GREEN);
 		// h_align is -46 to make room for the delete_icon
 	textbox_set_text_align(db, -46, 0);
 	/********************************************/
@@ -52,7 +53,7 @@ void add_to_item_list(char *item_name) {
 	/********************************************/
 		
 	//Temporary data
-	item_list[item_list_size] = create_item(item_name, "category a", 50, 50, db, di);
+	item_list[item_list_size] = create_item(display_item->name, display_item->category, display_item->x, display_item->y, db, di);
 	
 	item_list_size++; //increase the size by 1
 }

@@ -27,7 +27,6 @@ void textbox_set_box_colour(TextBox *tb, int b_c, int f_c) {
 void textbox_set_text(TextBox *tb, char *text, int font, int colour) {
 	tb->text = malloc(strlen(text)+1); //same as strdup
 	strcpy(tb->text, text);
-    //tb->text = text;
     tb->font = font;
     tb->colour = colour;
 }

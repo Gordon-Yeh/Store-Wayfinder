@@ -1,4 +1,8 @@
+#include <stdio.h>
+#include "../../Bluetooth/Bluetooth.h"
 #include "../components/textbox.h"
+#include "../item/parse_BT_items.h"
+#include "../item/item.h"
 #include "../Colours.h"
 #include "../Globalvars.h"
 #include "../Text.h"
@@ -20,6 +24,7 @@ static const int button_width = 75;
 // every shape that should be plotted should go here
 static struct {
     TextBox * item_buttons[10];
+	Item ** items;
     int num_items;
 	TextBox * back_button;
 	TextBox * map_button;
@@ -27,11 +32,20 @@ static struct {
 
 //item screen can only be as big as (20,0) to (541, 479)
 void item_screen_init(void) {
-	char * items[15] = {
-        "Appliances", "Bath", "Building Materials", "Decor & Blinds", "Electrical",
-        "Floors & Area Rugs", "Furniture", "Hardware", "Paint", "Tools",
-        "Kitchen", "Lighting & Fans", "Outdoors", "Storage & Organization", "Windows & Doors"
-    };
+	
+	char bt_out_cmd[40];
+	sprintf(bt_out_cmd, "c,%s", cur_category);
+	bt_send_message(bt_out_cmd);
+	
+	//each star (*) seperates name and x and y, each comma char is the end of an item, question mark marks end
+	
+	_ItemScreen.items = parse_BT_items();
+	
+	// char * items[15] = {
+        // "Appliances", "Bath", "Building Materials", "Decor & Blinds", "Electrical",
+        // "Floors & Area Rugs", "Furniture", "Hardware", "Paint", "Tools",
+        // "Kitchen", "Lighting & Fans", "Outdoors", "Storage & Organization", "Windows & Doors"
+    // };
 	
 	int item_added = 0;
     for (int col = 0; col < max_col; col++) {
@@ -43,7 +57,7 @@ void item_screen_init(void) {
                 button_width);
 
             textbox_set_box_colour(b, BLUE, FOREST_GREEN);
-            textbox_set_text(b, items[item_added], FONT2, WHITE);
+            textbox_set_text(b, _ItemScreen.items[item_added]->name, FONT2, WHITE);
 
             _ItemScreen.item_buttons[item_added] = b;
             item_added++;
@@ -112,7 +126,7 @@ screen_t item_screen_listen(void) {
 			for(int i = 0; i < _ItemScreen.num_items; i++) {
 				//Limit the number of items to 7 for now
 				if(textbox_within(_ItemScreen.item_buttons[i], pr)) {
-					add_to_item_list(_ItemScreen.item_buttons[i]->text);
+					add_to_item_list(_ItemScreen.items[i]); //ADD X AND Y HERE~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 					return ITEM_SIDEBAR;
 				}
 			}
