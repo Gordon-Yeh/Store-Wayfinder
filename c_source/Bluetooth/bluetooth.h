@@ -21,7 +21,7 @@ void Init_BT(void);
  * @returns 0 if successful
  *          otherwise - error code
  */
-int bt_receive_message(char * buffer);
+int bt_receive_message(char * buffer, unsigned int buffer_len);
 
 /**
  * sends a message through the bluetooth module
