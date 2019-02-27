@@ -7,6 +7,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include "bluetooth.h"
 
 #define BT_ReceiverFifo          		(*(volatile unsigned char *)(0xFF210220))
 #define BT_TransmitterFifo 				(*(volatile unsigned char *)(0xFF210220))
@@ -18,7 +19,6 @@
 #define BT_LineStatusReg				(*(volatile unsigned char *)(0xFF21022A))
 #define BT_ModemStatusReg				(*(volatile unsigned char *)(0xFF21022C))
 #define BT_ScratchReg					(*(volatile unsigned char *)(0xFF21022E))
-
 #define BT_DivisorLatchLSB				(*(volatile unsigned char *)(0xFF210220))
 #define BT_DivisorLatchMSB				(*(volatile unsigned char *)(0xFF210222))
 
@@ -85,28 +85,44 @@ int putcharBT(int c){
   return c;
 }
 
-int bt_receive_message(char * buffer, unsigned int buffer_len) {
-    int i = 0;
+int bt_receive_message(char ** buffer_ptr) {
+    char curr_char;
 
+    const int buffer_size = 300;
+    int start = 0;
+    int char_count = 0;
+ 
+    char * buffer = malloc(buffer_size);
     while (1) {
-        
+        if (BT_TestForReceiveData() == 1) {
+            curr_char = (char) getcharBT();
+            // terminating case
+            if (start && curr_char == '?')
+                break;
 
-    }
-    for(int i = 0; i < 2000000; i ++) {
-        if(BT_TestForReceiveData() == 1) {
-            int c = getcharBT();
-            // concat the character to end of message
-            strncat(message, (char *) (&c), 1);
-            i=0; // reset timer if we got something back
+            // concat the character to end of buffer
+            if (start) {
+                if (++char_count > buffer_size) {
+                    free(buffer);
+                    return BUFFER_OVERFLOW;
+                }
+                strncat(buffer, (char *) (&curr_char), 1);
+            }
+
+             // starting case
+            if (!start && curr_char == '@') 
+                start = 1;
         }
     }
-    return message;
+
+    *buffer_ptr = buffer;
+    return 0;
 }
 
 void bt_send_message(char * message) {
     printf("sending message: %s\n", message);
-	for (int i = 0; i < strlen(message); i ++) {
-		int c = putcharBT((int)message[i]);
+	for (int i = 0; i < strlen(message); i++) {
+		putcharBT((int) message[i]);
 	}
     // terminating charaters
     putcharBT('\r');
