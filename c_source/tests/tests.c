@@ -18,5 +18,6 @@ int main() {
     sys_init();
 
     /* put test to run here ..............*/
-    test_parse_postion_string();
+    // test_parse_postion_string();
+    test_tracker();
 }
