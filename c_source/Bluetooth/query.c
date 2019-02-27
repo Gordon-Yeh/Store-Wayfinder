@@ -6,12 +6,10 @@
 #define LOC_REQUEST_MESSAGE "p,"
 #define DELIMITER ","
 
-Point * query_map_position() {
-    char *position_str, *x_str, *y_str;
+Point * parse_postion_string(char * str) {
+    char *x_str, *y_str;
 
     Point * p = malloc(sizeof(Point));
-    bt_send_message(LOC_REQUEST_MESSAGE);
-    bt_receive_message(&position_str);
 
     x_str = strtok(position_str, DELIMITER);
     y_str = strtok(NULL, DELIMITER);
@@ -19,6 +17,16 @@ Point * query_map_position() {
     p->x = atoi(x_str);
     p->y = atoi(y_str);
 
+    return p;
+}
+
+Point * query_map_position() {
+    char *position_str;
+    Point * p;
+
+    bt_send_message(LOC_REQUEST_MESSAGE);
+    bt_receive_message(&position_str);
+    p = parse_postion_string(position_str);
     free(position_str);
 
     return p;
