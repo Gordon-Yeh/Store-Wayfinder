@@ -12,39 +12,25 @@ def main():
     # TODO: format of input data
     while 1:
         req = ser.port.readline().decode("utf-8")
-        
-#        print(type(req))
-#        print("req: "+req)
+
         query_type = req.split(",")[0]
-        if (query_type == "n"):
+        if (query_type == "p"):
             kw = req.split(",")[1]
-            item_x, item_y = db.search_name(kw)
+            #item_x, item_y = db.search_name(kw)
             pos_x, pos_y = cam.snapshot()
-#           print(pos_x)
-            ser.port.write(str.encode(str(item_x)+","+str(item_y)+","+str(pos_x)+","+str(pos_y)+"asdfghjkl"))
+            ser.port.write(str(pos_x)+","+str(pos_y)+"@@")
+
+        # "c" indicating it's a valid user input requesting name and coordingantes in a certain category
         if (query_type == "c"):
             kw = req.split(",")[1]
-            names = db.search_cat(kw)
-            for name in names:
-                print(name[0])
-                ser.port.write(name[0].encode())
-        """
-        if (req != "" and req!="\n"):
-
-            #TODO: take and process picture
-            print(req)
-            query_type = req.split(",")[0]
-            kw = req.split(",")[1]
-            if (query_type == "n"):
-                item_x, item_y = db.search_name(kw)
-                pos_x, pos_y = cam.snapshot()
-#                print(pos_x)
-                ser.port.write(str.encode(str(item_x)+","+str(item_y)+","+str(pos_x)+","+str(pos_y)+"asdfghjkl"))
-            if (query_type == "c"):
-                names = db.search_cat(kw)
-                for name in names:
-                    print(name[0])
-                    ser.port.write(name[0].encode())
-            """
+            entries = db.search(kw)
+            for entry in entries:
+                print(entry[0])
+                name = entry[0].encode()
+                x = str(entry[1]).encode()
+                y = str(entry[2]).encode()
+                ser.port.write(name+"<"+x+">"+y+",")
+            ser.port.write("?")
+            
 if __name__ == "__main__":
     main()

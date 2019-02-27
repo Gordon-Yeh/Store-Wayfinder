@@ -42,6 +42,11 @@ class DB(object):
         self.cursor.execute(query)
         return self.cursor.fetchall()
 
+    def search(self, category):
+        query = "SELECT name, x, y FROM Items WHERE category='"+category+"';";
+        self.cursor.execute(query)
+        return self.cursor.fetchall()
+
 # def db_init():
 #     db = connector.Connect(
 #         host = host,
