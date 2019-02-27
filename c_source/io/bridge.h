@@ -165,6 +165,34 @@ volatile unsigned short int *TS_DivisorLatchLSB;
 volatile unsigned short int *TS_DivisorLatchMSB;
 
 /* ========================================================================== */
+/* ================ Bluetooth ===============================================*/
+#define BT_ReceiverFifo_PADDR          		0xff210220
+#define BT_TransmitterFifo_PADDR 			0xff210220
+#define BT_InterruptEnableReg_PADDR 		0xff210222
+#define BT_InterruptIdentificationReg_PADDR	0xff210224
+#define BT_FifoControlReg_PADDR				0xff210224
+#define BT_LineControlReg_PADDR				0xff210226
+#define BT_ModemControlReg_PADDR			0xff210228
+#define BT_LineStatusReg_PADDR				0xff21022a
+#define BT_ModemStatusReg_PADDR				0xff21022c
+#define BT_ScratchReg_PADDR					0xff21022e
+#define BT_DivisorLatchLSB_PADDR			0xff210220
+#define BT_DivisorLatchMSB_PADDR		    0xff210222
+
+volatile unsigned short int *BT_ReceiverFifo;
+volatile unsigned short int *BT_TransmitterFifo;
+volatile unsigned short int *BT_InterruptEnableReg;
+volatile unsigned short int *BT_InterruptIdentificationReg;
+volatile unsigned short int *BT_FifoControlReg;
+volatile unsigned short int *BT_LineControlReg;
+volatile unsigned short int *BT_ModemControlReg;
+volatile unsigned short int *BT_LineStatusReg;
+volatile unsigned short int *BT_ModemStatusReg;
+volatile unsigned short int *BT_ScratchReg;
+volatile unsigned short int *BT_DivisorLatchLSB;
+volatile unsigned short int *BT_DivisorLatchMSB;
+
+/* ========================================================================== */
 /**
  * initalize and set up the virtual addresses, call before accessing them
  */

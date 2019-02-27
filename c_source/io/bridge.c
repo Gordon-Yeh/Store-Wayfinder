@@ -15,6 +15,7 @@ static void gps_bridge_init();
 static void serial_bridge_init();
 static void wifi_bridge_init();
 static void ts_bridge_init();
+static void bt_bridge_init();
 
 void bridge_init() {
     // Open memory as if it were a device for read and write access
@@ -40,6 +41,7 @@ void bridge_init() {
     serial_bridge_init();
     wifi_bridge_init();
     ts_bridge_init();
+    bt_bridge_init();
 }
 
 void bridge_close() {
@@ -131,4 +133,19 @@ static void ts_bridge_init() {
     TS_ScratchReg =                 (unsigned short int *) (virtual_base + (TS_ScratchReg_PADDR & HW_REGS_MASK));
     TS_DivisorLatchLSB =            (unsigned short int *) (virtual_base + (TS_DivisorLatchLSB_PADDR & HW_REGS_MASK));
     TS_DivisorLatchMSB =            (unsigned short int *) (virtual_base + (TS_DivisorLatchMSB_PADDR & HW_REGS_MASK));
+}
+
+static void bt_bridge_init() {
+    BT_ReceiverFifo =               (unsigned short int *) (virtual_base + (BT_ReceiverFifo_PADDR & HW_REGS_MASK));
+    BT_TransmitterFifo =            (unsigned short int *) (virtual_base + (BT_TransmitterFifo_PADDR & HW_REGS_MASK));
+    BT_InterruptEnableReg =         (unsigned short int *) (virtual_base + (BT_InterruptEnableReg_PADDR & HW_REGS_MASK));
+    BT_InterruptIdentificationReg = (unsigned short int *) (virtual_base + (BT_InterruptIdentificationReg_PADDR & HW_REGS_MASK));
+    BT_FifoControlReg =             (unsigned short int *) (virtual_base + (BT_FifoControlReg_PADDR & HW_REGS_MASK));
+    BT_LineControlReg =             (unsigned short int *) (virtual_base + (BT_LineControlReg_PADDR & HW_REGS_MASK));
+    BT_ModemControlReg =            (unsigned short int *) (virtual_base + (BT_ModemControlReg_PADDR & HW_REGS_MASK));
+    BT_LineStatusReg =              (unsigned short int *) (virtual_base + (BT_LineStatusReg_PADDR & HW_REGS_MASK));
+    BT_ModemStatusReg =             (unsigned short int *) (virtual_base + (BT_ModemStatusReg_PADDR & HW_REGS_MASK));
+    BT_ScratchReg =                 (unsigned short int *) (virtual_base + (BT_ScratchReg_PADDR & HW_REGS_MASK));
+    BT_DivisorLatchLSB =            (unsigned short int *) (virtual_base + (BT_DivisorLatchLSB_PADDR & HW_REGS_MASK));
+    BT_DivisorLatchMSB =            (unsigned short int *) (virtual_base + (BT_DivisorLatchMSB_PADDR & HW_REGS_MASK));
 }
