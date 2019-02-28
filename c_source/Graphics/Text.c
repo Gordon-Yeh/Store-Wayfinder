@@ -155,7 +155,7 @@ void Sentence(int font, int x, int y, int fontcolour, int backgroundcolour, char
 	}
 	else { //font2
 		for(i = 0; i < strlen(sentence); i++) {
-			Font2(x+10*i, y, fontcolour, backgroundcolour, (int) sentence[i], Erase);
+			Font2(x+11*i, y, fontcolour, backgroundcolour, (int) sentence[i], Erase);
 		}
 	}
 }
@@ -177,4 +177,11 @@ void CenteredSentence(int font, int leftx, int rightx, int topy, int boty, int f
 			Font2(startingx+11*i, startingy, fontcolour, backgroundcolour, (int) sentence[i], Erase);
 		}
 	// }
+}
+
+void Paragraph(int x, int y, int fontcolour, int backgroundcolour, char * sentences[], int sentences_size, int Erase) {
+	int row_gap = 3;
+	for(int row = 0; row < sentences_size; row++) {
+		Sentence(FONT2, x, y+row*(FONT2_YPIXELS+row_gap), fontcolour, backgroundcolour, sentences[row], Erase);
+	}
 }

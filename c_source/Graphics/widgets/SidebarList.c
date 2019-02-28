@@ -20,10 +20,10 @@ void sidebarlist_draw(void) {
 		textbox_draw(item_list[i]->delete_icon);
 	}
 	
-	char s_pgnm[3];
-	sprintf(s_pgnm, "%d", pagenum+1);
+	char s_pgnm[10];
+	sprintf(s_pgnm, "%d of %d", pagenum + 1, (item_list_size - 1)/pagesize + 1);
 	CenteredSentence(FONT2, 542, 793, 426, 475, WHITE, 0, s_pgnm, DONT_ERASE);
 	
-	BackArrow(574, 426, WHITE);
-	NextArrow(715, 426, WHITE);
+	BackArrow(564, 426, WHITE);
+	NextArrow(725, 426, WHITE);
 }
