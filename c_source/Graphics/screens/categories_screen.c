@@ -80,11 +80,8 @@ screen_t categories_screen_listen(void) {
 			for(int i = 0; i < _CategoriesScreen.num_categories; i++) {
 				if (textbox_within(_CategoriesScreen.category_buttons[i], pr)) {
 					//set the global current category to the category selected
-					if(strcmp(_CategoriesScreen.category_buttons[i]->text, "Building Materials"))
-						cur_category = "Lumber and Building Materials";
-					else
-						cur_category = _CategoriesScreen.category_buttons[i]->text;
-					return ITEM;
+                    cur_category = _CategoriesScreen.category_buttons[i]->text;
+                    return ITEM;
 				}
 			}
 		}
