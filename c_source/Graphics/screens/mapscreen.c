@@ -1,6 +1,8 @@
 //map screen can only be as big as (20,0) to (541, 479)
 //map dimensions: 518x418
 
+#include <stdlib.h>
+
 #include "../components/textbox.h"
 #include "../Colours.h"
 #include "../draw/DrawMap.h"
@@ -10,6 +12,8 @@
 #include "../Touchscreen.h"
 #include "mapscreen.h"
 #include "screen.h"
+#include "../../Bluetooth/query.h"
+#include "../draw/DrawImages.h"
 
 static const int base_x = 25;
 
@@ -41,22 +45,53 @@ void map_screen_destroy(void) {
 	textbox_destroy(_MapScreen.done_button);
 }
 
+/**
+ * @returns 1 : if p would be located in the map domain
+ */ 
+static int is_in_map(Point * p) {
+    return (p->x > PERSON_HALF_WIDTH) 
+        && (p->y > PERSON_HALF_HEIGHT) 
+        && (p->x < MAP_WIDTH - PERSON_HALF_WIDTH) 
+        && (p->y < MAP_HEIGHT - PERSON_HALF_HEIGHT);
+}
+
+static void plot_location(Point * p, int colour) {
+    Person(MAP_BASE_X, MAP_BASE_Y, p->x, p->y, colour);
+}
+
+static void refill_location(Point * p) {
+    DrawMapSection(MAP_BASE_X, MAP_BASE_Y, p->x, p->y);
+}
+
 void map_screen_draw(void) {
 	//Title
 	CenteredSentence(FONT2, 20, 541, 0, 55, FOREST_GREEN, 0, "Store Map", DONT_ERASE);
 	DrawMap(map_base_x, map_base_y);
     textbox_draw(_MapScreen.back_button);
 	textbox_draw(_MapScreen.done_button);
-	location_plotter_start(2, MAP_BASE_X, MAP_BASE_Y, RED);
 }
 
 screen_t map_screen_listen(void) {
 	Point pp, pr;
+	Point *prev_p, *curr_p;
+	Point *p = malloc(sizeof(Point));
+	p->x = 50;
+	p->y = 50;
+	prev_p = p;
     while (1) {
+		curr_p = query_map_position();
+		if (curr_p && is_in_map(curr_p)) {
+			refill_location(prev_p);
+			plot_location(curr_p, RED);
+			free(prev_p);
+			prev_p = curr_p;
+		}
+
         pp = GetPress();
 		pr = GetRelease();
+
         if (textbox_within(_MapScreen.back_button, pr)) {
-			location_plotter_end();
+			// location_plotter_end();
             return ITEM;
         }
 		else if (textbox_within(_MapScreen.done_button, pr)) {
@@ -66,7 +101,7 @@ screen_t map_screen_listen(void) {
 			}
 			//Set the global item_list_size to 0
             item_list_size = 0;
-			location_plotter_end();
+			// location_plotter_end();
             return HOME;
         }
 		else if (within_box(prev_page, pr)) {
