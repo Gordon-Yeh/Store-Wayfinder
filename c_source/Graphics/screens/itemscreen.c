@@ -126,7 +126,7 @@ screen_t item_screen_listen(void) {
 			for(int i = 0; i < _ItemScreen.num_items; i++) {
 				//Limit the number of items to 7 for now
 				if(textbox_within(_ItemScreen.item_buttons[i], pr)) {
-					add_to_item_list(_ItemScreen.items[i]); //ADD X AND Y HERE~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+					add_to_item_list(_ItemScreen.items[i]);
 					return ITEM_SIDEBAR;
 				}
 			}

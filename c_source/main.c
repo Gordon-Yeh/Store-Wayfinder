@@ -1,5 +1,5 @@
 #include "Graphics/gui.h"
-#include "Bluetooth/Bluetooth.h"
+#include "Bluetooth/bluetooth.h"
 
 int main(void)
 {
