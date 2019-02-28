@@ -1,6 +1,7 @@
 #include "../Colours.h"
 #include "../draw/draw.h"
 #include "../item/plot_items.h"
+#include "../../Security/tracker.h"
 
 #include "screen.h"
 #include "homescreen.h"
@@ -8,6 +9,7 @@
 #include "itemscreen.h"
 #include "mapscreen.h"
 #include "helpscreen.h"
+#include "antitheft_screen.h"
 
 #include "../widgets/widgets.h"
 
@@ -60,6 +62,10 @@ void screen_draw(screen_t screen) {
 			reset_screen();
 			help_screen_draw();
 		} break;
+
+		case THIEF: {  //TODO: should draw the screen after it's implemented 
+			reset_screen();
+		} break;
 		
         // TODO: add more screens
         default: {
@@ -101,10 +107,17 @@ screen_t screen_listen(screen_t curr_screen) {
 			next_screen = help_screen_listen();
 		} break;
 		
-        // TODO: add more screens
+		case THIEF: {
+			next_screen = antitheft_screen_listen();
+		} break;
+
         default: {
 			next_screen = HOME;
 		}
     }
+
+	if (tracker_get_status() == OUT_OF_BOUND)
+		next_screen = THIEF;
+
 	return next_screen;
 }

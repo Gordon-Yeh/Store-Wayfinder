@@ -7,6 +7,7 @@
 #include "tests.h"
 
 void test_bt1() {
+    printf("\n\nrunning [test_bt1]...\n");
     char * respond;
     bt_send_message("p,");
     int result = bt_receive_message(&respond);

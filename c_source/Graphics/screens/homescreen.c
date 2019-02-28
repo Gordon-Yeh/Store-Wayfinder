@@ -3,6 +3,7 @@
 #include "../Text.h"
 #include "../components/textbox.h"
 #include "../Touchscreen.h"
+
 #include <stdio.h>
 
 #include "screen.h"
@@ -53,6 +54,7 @@ screen_t homescreen_listen() {
         pp = GetPress();
 		pr = GetRelease();
 		printf("Press %d, %d", pp.x, pp.y);
+
         if (textbox_within(_HomeScreen.new_list_button, pr)) {
 			//Free item_list memory
 			for(int i = 0; i < item_list_size; i++) {
