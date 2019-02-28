@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <stdio.h>
 #include <string.h>
 #include "../Graphics/Touchscreen.h"
 #include "bluetooth.h"
@@ -13,10 +14,10 @@ Point * parse_postion_string(char * str) {
 
     x_str = strtok(str, DELIMITER);
     y_str = strtok(NULL, DELIMITER);
+    strtok(NULL, DELIMITER);
 
     p->x = atoi(x_str);
     p->y = atoi(y_str);
-
     return p;
 }
 
@@ -26,6 +27,7 @@ Point * query_map_position() {
 
     bt_send_message(LOC_REQUEST_MESSAGE);
     bt_receive_message(&position_str);
+    printf("query_map_position: receive: %s\n", position_str);
     p = parse_postion_string(position_str);
     free(position_str);
 

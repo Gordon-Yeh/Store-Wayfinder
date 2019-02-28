@@ -80,9 +80,16 @@ int bt_receive_message(char ** buffer_ptr) {
     int char_count = 0;
  
     char * buffer = malloc(buffer_size);
+    buffer[0] = '\0';
     while (1) {
         if (BT_TestForReceiveData() == 1) {
             curr_char = (char) getcharBT();
+            // starting case
+            if (!start && curr_char == '@') {
+                start = 1;
+                continue;
+            }
+
             // terminating case
             if (start && curr_char == '?')
                 break;
@@ -95,10 +102,6 @@ int bt_receive_message(char ** buffer_ptr) {
                 }
                 strncat(buffer, (char *) (&curr_char), 1);
             }
-
-             // starting case
-            if (!start && curr_char == '@') 
-                start = 1;
         }
     }
 

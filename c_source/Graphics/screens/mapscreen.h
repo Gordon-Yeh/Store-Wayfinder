@@ -3,6 +3,9 @@
 
 #include "screen.h"
 
+#define MAP_BASE_X 22
+#define MAP_BASE_Y 60
+
 void map_screen_init(void);
 
 void map_screen_destroy(void);
