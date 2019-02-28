@@ -7,8 +7,12 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <pthread.h>
+
 #include "../io/bridge.h"
 #include "bluetooth.h"
+
+pthread_mutex_t bt_lock;
 
 void Init_BT(void){
 //set bit 7 of Line Control Register to 1, to gain access to the baud rate registers
@@ -82,6 +86,8 @@ int bt_receive_message(char ** buffer_ptr) {
     char * buffer = malloc(buffer_size);
     buffer[0] = '\0';
     unsigned int i = 0;
+
+    pthread_mutex_lock(&bt_lock);
     while (1) {
         if (BT_TestForReceiveData() == 1) {
             curr_char = (char) getcharBT();
@@ -99,28 +105,34 @@ int bt_receive_message(char ** buffer_ptr) {
             if (start) {
                 if (++char_count > buffer_size) {
                     free(buffer);
+                    pthread_mutex_unlock(&bt_lock);
                     return BUFFER_OVERFLOW;
                 }
                 strncat(buffer, (char *) (&curr_char), 1);
                 i = 0;
             }
+        }
 
-            if (++i > 50000000) {
-              return TIME_OUT;
-            }
+        if (++i > 5000000) {
+          pthread_mutex_unlock(&bt_lock);
+          return TIME_OUT;
         }
     }
 
+    pthread_mutex_unlock(&bt_lock);
     *buffer_ptr = buffer;
     return 0;
 }
 
 void bt_send_message(char * message) {
     printf("sending message: %s\n", message);
+
+  pthread_mutex_lock(&bt_lock);
 	for (int i = 0; i < strlen(message); i++) {
 		putcharBT((int) message[i]);
 	}
     // terminating charaters
     putcharBT('\r');
     putcharBT('\n');
+  pthread_mutex_unlock(&bt_lock);
 }
