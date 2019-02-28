@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <unistd.h>
 #include "../Graphics/Touchscreen.h"
 #include "bluetooth.h"
 
@@ -26,6 +27,7 @@ Point * query_map_position() {
     Point * p;
 
     bt_send_message(LOC_REQUEST_MESSAGE);
+    sleep(1);
     if(bt_receive_message(&position_str) == TIME_OUT) {
         return NULL;
     }

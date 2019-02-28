@@ -47,7 +47,7 @@ void map_screen_draw(void) {
 	DrawMap(map_base_x, map_base_y);
     textbox_draw(_MapScreen.back_button);
 	textbox_draw(_MapScreen.done_button);
-	// location_plotter_start(2, MAP_BASE_X, MAP_BASE_Y, RED);
+	location_plotter_start(2, MAP_BASE_X, MAP_BASE_Y, RED);
 }
 
 screen_t map_screen_listen(void) {
@@ -56,7 +56,7 @@ screen_t map_screen_listen(void) {
         pp = GetPress();
 		pr = GetRelease();
         if (textbox_within(_MapScreen.back_button, pr)) {
-			// location_plotter_end();
+			location_plotter_end();
             return ITEM;
         }
 		else if (textbox_within(_MapScreen.done_button, pr)) {
@@ -66,7 +66,7 @@ screen_t map_screen_listen(void) {
 			}
 			//Set the global item_list_size to 0
             item_list_size = 0;
-			// location_plotter_end();
+			location_plotter_end();
             return HOME;
         }
 		else if (within_box(prev_page, pr)) {

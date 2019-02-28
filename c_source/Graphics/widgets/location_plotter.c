@@ -1,6 +1,8 @@
+#include <stdlib.h>
 #include <pthread.h>
 #include <unistd.h>
 #include <stdio.h>
+
 #include "../../io/bridge.h"
 #include "../../Bluetooth/query.h"
 #include "../Touchscreen.h"
@@ -15,6 +17,8 @@ static int _xoffset, _yoffset;
 static void *update_location(void * args);
 static void plot_location(Point * p);
 static void refill_location(Point * p);
+static int approx_equal(Point * p1, Point * p2);
+static int is_in_map(Point * p);
 
 #define PERSON_HALF_WIDTH 9
 #define PERSON_HALF_HEIGHT 13
@@ -41,16 +45,18 @@ static void *update_location(void * args) {
     Point p;
     Point *curr_p, *prev_p;
     // initalize the point so the first iteration won't complain
-    p.x = 0;
-    p.y = 0;
+    p.x = _xoffset + 50;
+    p.y = _yoffset + 50;
     prev_p = &p;
     while (_running) {
         curr_p = query_map_position();
-        if (curr_p == NULL) continue;
         // printf("current locations: (%d, %d)\n", curr_p->x, curr_p->y);
-        refill_location(prev_p);
-        plot_location(curr_p);
-        prev_p = curr_p;
+        if (curr_p != NULL && !approx_equal(curr_p, prev_p) && is_in_map(curr_p)) {
+            refill_location(prev_p);
+            sleep(1);
+            plot_location(curr_p);
+            prev_p = curr_p;
+        }
         sleep(_update_rate);
     }
     refill_location(prev_p);
@@ -58,21 +64,27 @@ static void *update_location(void * args) {
 }
 
 static void plot_location(Point * p) {
-    printf("printing person at (%d, %d)\n", _xoffset + p->x, _yoffset + p->y);
-    if (p->x < PERSON_HALF_WIDTH || p->y < PERSON_HALF_HEIGHT) return;
-    if (p->x > MAP_WIDTH - PERSON_HALF_WIDTH || p->y > MAP_HEIGHT - PERSON_HALF_HEIGHT) return;
     Person(_xoffset, _yoffset, p->x, p->y, _colour);
 }
 
 static void refill_location(Point * p) {
-    printf("refilling person at (%d, %d)\n", _xoffset + p->x, _yoffset + p->y);
-    if (p->x < PERSON_HALF_WIDTH || p->y < PERSON_HALF_HEIGHT) return;
-    if (p->x > MAP_WIDTH - PERSON_HALF_WIDTH || p->y > MAP_HEIGHT - PERSON_HALF_HEIGHT) return;
     DrawMapSection(_xoffset, _yoffset, p->x, p->y);
 }
 
+static int is_in_map(Point * p) {
+    return (p->x > PERSON_HALF_WIDTH) 
+        && (p->y > PERSON_HALF_HEIGHT) 
+        && (p->x < MAP_WIDTH - PERSON_HALF_WIDTH) 
+        && (p->y < MAP_HEIGHT - PERSON_HALF_HEIGHT);
+}
+
+// @returns 1 if p1 and p2 are approximately equal
+static int approx_equal(Point * p1, Point * p2) {
+    return abs(p1->x - p2->x) < 5 && abs(p1->y - p2->y) < 5;
+}
+
 void location_plotter_end() {
-    *LEDs = *LEDs & ~(0x4);
+    *LEDs = *LEDs & ~(0x4); // turn LED3 off
     _running = 0;
     pthread_join(_lp_thread, NULL);
 }
