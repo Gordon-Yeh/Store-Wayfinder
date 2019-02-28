@@ -77,7 +77,7 @@ static void *gps_tracking_loop(void *arg) {
 }
 
 static void *switch_tracking_loop(void *arg) {
-    *LEDs = *LEDs | 0x1; // light up LEDR0 to indecate the security feature is on
+    *LEDs = *LEDs & 0x2; // light up LEDR1 to indecate the security feature is on
     while (1) {
         _status = get_switch_status();
         // obey the update rate by putting thread to sleep, so other threads can run

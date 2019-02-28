@@ -9,8 +9,8 @@
 
 #include "../GPS/GPS.h"
 
-#define IN_BOUND 1
-#define OUT_OF_BOUND 0
+#define IN_BOUND 0
+#define OUT_OF_BOUND 1
 
 typedef struct {
     float min_lon;

@@ -8,6 +8,7 @@
 #include "itemscreen.h"
 #include "mapscreen.h"
 #include "helpscreen.h"
+#include "antitheft_screen.h"
 
 #include "../widgets/widgets.h"
 
@@ -60,6 +61,10 @@ void screen_draw(screen_t screen) {
 			reset_screen();
 			help_screen_draw();
 		} break;
+
+		case THIEF: {  //TODO: should draw the screen after it's implemented 
+			reset_screen();
+		} break;
 		
         // TODO: add more screens
         default: {
@@ -101,7 +106,10 @@ screen_t screen_listen(screen_t curr_screen) {
 			next_screen = help_screen_listen();
 		} break;
 		
-        // TODO: add more screens
+		case THIEF: {
+			next_screen = antitheft_screen_listen();
+		} break;
+
         default: {
 			next_screen = HOME;
 		}
