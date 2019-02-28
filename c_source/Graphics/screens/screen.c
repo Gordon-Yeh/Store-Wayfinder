@@ -51,9 +51,9 @@ void screen_draw(screen_t screen) {
 		} break;
 		case MAP: {
 			reset_screen();
-			map_screen_draw();
 			plot_items();
 			sidebarlist_draw();
+			map_screen_draw();
 		} break;
 		case MAP_SIDEBAR: {
 			plot_items();

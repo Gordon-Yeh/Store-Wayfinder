@@ -56,6 +56,7 @@ static void *update_location(void * args) {
             plot_location(curr_p);
             prev_p = curr_p;
         }
+        if (!_running) break; // so we don't have to sleep for another bit before killing the thread
         sleep(_update_rate);
     }
     refill_location(prev_p);
