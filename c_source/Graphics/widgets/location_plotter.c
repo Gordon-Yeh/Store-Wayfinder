@@ -53,7 +53,6 @@ static void *update_location(void * args) {
         // printf("current locations: (%d, %d)\n", curr_p->x, curr_p->y);
         if (curr_p != NULL && !approx_equal(curr_p, prev_p) && is_in_map(curr_p)) {
             refill_location(prev_p);
-            sleep(1);
             plot_location(curr_p);
             prev_p = curr_p;
         }

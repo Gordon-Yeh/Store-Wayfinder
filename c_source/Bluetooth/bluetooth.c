@@ -125,14 +125,12 @@ int bt_receive_message(char ** buffer_ptr) {
 }
 
 void bt_send_message(char * message) {
-    printf("sending message: %s\n", message);
-
   pthread_mutex_lock(&bt_lock);
 	for (int i = 0; i < strlen(message); i++) {
 		putcharBT((int) message[i]);
 	}
-    // terminating charaters
-    putcharBT('\r');
-    putcharBT('\n');
+  // terminating charaters
+  putcharBT('\r');
+  putcharBT('\n');
   pthread_mutex_unlock(&bt_lock);
 }
