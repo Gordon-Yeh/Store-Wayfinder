@@ -23,7 +23,6 @@ static struct {
     TextBox * back_button;
     TextBox * category_buttons[15];
     int num_categories;
-    // TODO: add all the component of homescreen here
 } _CategoriesScreen;
 
 void categories_screen_init() {

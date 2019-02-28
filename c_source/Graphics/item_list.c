@@ -20,8 +20,6 @@ static const int di_box_length = 40; //x
 static const int di_box_width = 40; //y
 
 void add_to_item_list(Item *display_item) {
-	//TODO: find the item from the database and create a new item to put in the item_list array
-	
 	//ie. if item_list_size == 3, 3 items in array already, so insert an item into the 3rd index, row = 3
 	//ie. if item_list_size == 7, 7 items in array already, so insert an item into the 7th index, row = 0
 	int row = item_list_size%pagesize;

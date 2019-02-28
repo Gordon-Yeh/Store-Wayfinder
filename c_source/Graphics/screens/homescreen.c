@@ -12,7 +12,6 @@
 static struct {
     TextBox * new_list_button;
     TextBox * help_button;
-    // TODO: add all the component of homescreen here
 } _HomeScreen;
 
 void homescreen_init() {

@@ -11,7 +11,6 @@
 #include "../Defines.h"
 #include "../Colours.h"
 #include "DrawImages.h"
-//TODO: 5x5 circle
 
 void NextArrow(int x, int y, int colour){
 	int row, column, pixel;
