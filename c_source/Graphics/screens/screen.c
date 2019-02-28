@@ -26,6 +26,7 @@ void screen_init() {
     categories_screen_init();
 	map_screen_init();
 	help_screen_init();
+	antitheft_screen_init();
 }
 
 void screen_draw(screen_t screen) {

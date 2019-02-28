@@ -1,6 +1,7 @@
 #ifndef TOUCHSCREEN_H_   /* Include guard */
 #define TOUCHSCREEN_H_
 
+#define SCREEN_X_OFFSET 20
 #define SCREEN_X_MAX 799
 #define SCREEN_Y_MAX 479
 
