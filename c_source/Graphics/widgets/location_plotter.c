@@ -17,7 +17,7 @@ static int _xoffset, _yoffset;
 static void *update_location(void * args);
 static void plot_location(Point * p);
 static void refill_location(Point * p);
-static int approx_equal(Point * p1, Point * p2);
+static int approx_equal(Point * p1, Point * p2, int tolerance);
 static int is_in_map(Point * p);
 
 int location_plotter_start(int update_rate, int x_offset, int y_offset, int colour) {
@@ -35,20 +35,26 @@ int location_plotter_start(int update_rate, int x_offset, int y_offset, int colo
     return 1;
 }
 
+void location_plotter_end() {
+    *LEDs = *LEDs & ~(0x4); // turn LED3 off
+    _running = 0;
+    pthread_join(_lp_thread, NULL);
+}
+
 static void *update_location(void * args) {
     *LEDs = *LEDs | 0x4; // turn on LED2 to indicate its running 
-    Point p;
+    Point *p = malloc(sizeof(Point));
     Point *curr_p, *prev_p;
     // initalize the point so the first iteration won't complain
-    p.x = _xoffset + 50;
-    p.y = _yoffset + 50;
-    prev_p = &p;
+    p->x = _xoffset + 50;
+    p->y = _yoffset + 50;
+    prev_p = p;
     while (_running) {
         curr_p = query_map_position();
-        // printf("current locations: (%d, %d)\n", curr_p->x, curr_p->y);
-        if (curr_p != NULL && !approx_equal(curr_p, prev_p) && is_in_map(curr_p)) {
+        if (curr_p != NULL && !approx_equal(curr_p, prev_p, 5) && is_in_map(curr_p)) {
             refill_location(prev_p);
             plot_location(curr_p);
+            free(prev_p);
             prev_p = curr_p;
         }
         if (!_running) break; // so we don't have to sleep for another bit before killing the thread
@@ -66,6 +72,9 @@ static void refill_location(Point * p) {
     DrawMapSection(_xoffset, _yoffset, p->x, p->y);
 }
 
+/**
+ * @returns 1 : if p would be located in the map domain
+ */ 
 static int is_in_map(Point * p) {
     return (p->x > PERSON_HALF_WIDTH) 
         && (p->y > PERSON_HALF_HEIGHT) 
@@ -73,13 +82,10 @@ static int is_in_map(Point * p) {
         && (p->y < MAP_HEIGHT - PERSON_HALF_HEIGHT);
 }
 
-// @returns 1 if p1 and p2 are approximately equal
-static int approx_equal(Point * p1, Point * p2) {
-    return abs(p1->x - p2->x) < 5 && abs(p1->y - p2->y) < 5;
-}
-
-void location_plotter_end() {
-    *LEDs = *LEDs & ~(0x4); // turn LED3 off
-    _running = 0;
-    pthread_join(_lp_thread, NULL);
+/** 
+ * checks if 2 points are approximately equal
+ * @returns 1 : if p1 and p2's difference in x and y are within tolerance 
+ */
+static int approx_equal(Point * p1, Point * p2, int tolerance) {
+    return abs(p1->x - p2->x) < tolerance && abs(p1->y - p2->y) < tolerance;
 }
