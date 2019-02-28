@@ -1,3 +1,4 @@
+#include <string.h>
 #include "../components/textbox.h"
 #include "../Colours.h"
 #include "../Globalvars.h"
@@ -27,9 +28,9 @@ static struct {
 
 void categories_screen_init() {
     char * item_categories[15] = {
-        "Appliances", "Bath", "Building Materials", "Decor & Blinds", "Electrical",
-        "Floors & Area Rugs", "Furniture", "Hardware", "Paint", "Tools",
-        "Kitchen", "Lighting & Fans", "Outdoors", "Storage & Organization", "Windows & Doors"
+        "Nursery", "Garden", "Building Materials", "Plumbing", "Lighting",
+        "Electrical", "Kitchen & Bath", "HVAC", "Storage", "Inside Lumber",
+        "Seasonal", "Tools", "Housewares", "Hardware", "Fasteners"
     };
 
     int cate_added = 0;
@@ -79,7 +80,10 @@ screen_t categories_screen_listen(void) {
 			for(int i = 0; i < _CategoriesScreen.num_categories; i++) {
 				if (textbox_within(_CategoriesScreen.category_buttons[i], pr)) {
 					//set the global current category to the category selected
-					cur_category = _CategoriesScreen.category_buttons[i]->text;
+					if(strcmp(_CategoriesScreen.category_buttons[i]->text, "Building Materials"))
+						cur_category = "Lumber and Building Materials";
+					else
+						cur_category = _CategoriesScreen.category_buttons[i]->text;
 					return ITEM;
 				}
 			}

@@ -16,7 +16,7 @@ extern const int pagesize;
 extern Box *next_page;
 extern Box *prev_page;
 
-void add_to_item_list(char *item_name);
+void add_to_item_list(Item *display_item);
 void remove_from_item_list(int index);
 
 #endif
