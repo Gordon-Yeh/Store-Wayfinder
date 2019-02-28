@@ -19,8 +19,6 @@ static void *switch_tracking_loop(void *);
 static int get_switch_status();
 
 int tracker_start(Bound tracking_bound, unsigned int update_rate, int mode) {
-    Init_GPS();
-
     // FIXME: do I need to keep a ref to this?
     pthread_t tracker_thread;
     int tracker_thread_code;
@@ -77,7 +75,7 @@ static void *gps_tracking_loop(void *arg) {
 }
 
 static void *switch_tracking_loop(void *arg) {
-    *LEDs = *LEDs & 0x2; // light up LEDR1 to indecate the security feature is on
+    *LEDs = *LEDs | 0x1; // light up LEDR1 to indecate the security feature is on
     while (1) {
         _status = get_switch_status();
         // obey the update rate by putting thread to sleep, so other threads can run

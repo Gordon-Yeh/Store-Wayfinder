@@ -32,7 +32,6 @@ int gui_run() {
 
 int gui_start() {
     printf("GUI starting...\n");
-	Init_Touch();
 	
 	// Initialize global box variables
 	prev_page = create_box(564, 426, 50, 50, FOREST_GREEN, FOREST_GREEN);
