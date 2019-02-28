@@ -3,7 +3,6 @@
 #include "../Text.h"
 #include "../components/textbox.h"
 #include "../Touchscreen.h"
-#include "../../Security/tracker.h"
 
 #include <stdio.h>
 
@@ -55,10 +54,6 @@ screen_t homescreen_listen() {
         pp = GetPress();
 		pr = GetRelease();
 		printf("Press %d, %d", pp.x, pp.y);
-
-		if (tracker_get_status() == OUT_OF_BOUND) {
-			return THIEF;
-		}
 
         if (textbox_within(_HomeScreen.new_list_button, pr)) {
 			//Free item_list memory

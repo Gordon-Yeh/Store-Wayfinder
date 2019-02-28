@@ -1,6 +1,7 @@
 #include "../Colours.h"
 #include "../draw/draw.h"
 #include "../item/plot_items.h"
+#include "../../Security/tracker.h"
 
 #include "screen.h"
 #include "homescreen.h"
@@ -114,5 +115,9 @@ screen_t screen_listen(screen_t curr_screen) {
 			next_screen = HOME;
 		}
     }
+
+	if (tracker_get_status() == OUT_OF_BOUND)
+		next_screen = THIEF;
+
 	return next_screen;
 }
