@@ -19,7 +19,6 @@ static void *switch_tracking_loop(void *);
 static int get_switch_status();
 
 int tracker_start(Bound tracking_bound, unsigned int update_rate, int mode) {
-    // FIXME: do I need to keep a ref to this?
     pthread_t tracker_thread;
     int tracker_thread_code;
     void * start_routine;

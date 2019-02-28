@@ -22,7 +22,7 @@ void test_parse_postion_string() {
     Point expected1;
     expected1.x = 0;
     expected1.y = 0;
-    Point * p1 = parse_postion_string(test_str1); // FIXME: broken right now because the string should be stored in heap
+    Point * p1 = parse_postion_string(test_str1);
     fail_count += test_int("test_parse_position_string 1-x:", expected1.x, p1->x);
     fail_count += test_int("test_parse_position_string 1-y:", expected1.y, p1->y);
 
