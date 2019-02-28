@@ -20,11 +20,6 @@ static void refill_location(Point * p);
 static int approx_equal(Point * p1, Point * p2);
 static int is_in_map(Point * p);
 
-#define PERSON_HALF_WIDTH 9
-#define PERSON_HALF_HEIGHT 13
-#define MAP_WIDTH 518
-#define MAP_HEIGHT 418
-
 int location_plotter_start(int update_rate, int x_offset, int y_offset, int colour) {
     int result;
     _running = 1;

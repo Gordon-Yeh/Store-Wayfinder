@@ -8,6 +8,10 @@
 #ifndef DRAWIMAGES_H_
 #define DRAWIMAGES_H_
 
+
+#define PERSON_HALF_WIDTH 9
+#define PERSON_HALF_HEIGHT 13
+
 extern const unsigned char Next_Arrow[];
 extern const unsigned char Back_Arrow[];
 extern const unsigned char Small_Circle[];
