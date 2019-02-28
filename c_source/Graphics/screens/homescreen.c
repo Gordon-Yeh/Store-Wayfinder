@@ -23,7 +23,7 @@ void homescreen_init() {
 	textbox_set_box_colour(new_list_button, BLUE, FOREST_GREEN);
 	textbox_set_box_colour(help_button, BLUE, FOREST_GREEN);
 
-	textbox_set_text(new_list_button, "Start New Shopping List", FONT2, WHITE);
+	textbox_set_text(new_list_button, "Start Shopping List", FONT2, WHITE);
 	textbox_set_text(help_button, "Help", FONT2, WHITE);
 
     _HomeScreen.new_list_button = new_list_button;
@@ -44,11 +44,6 @@ screen_t homescreen_listen() {
 
         if (textbox_within(_HomeScreen.new_list_button, pr)) {
 			//Free item_list memory
-			for(int i = 0; i < item_list_size; i++) {
-				destroy_item(item_list[i]);
-			}
-			//Set the global item_list_size to 0
-            item_list_size = 0;
 			return CATEGORIES;
         } else if (textbox_within(_HomeScreen.help_button, pr)) {
             return HELP;
