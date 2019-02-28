@@ -9,7 +9,7 @@
 void sys_init() {
     bridge_init();  
     Init_BT();
-    Init_Wifi();
+    // Init_Wifi(); TODO: fix, right now it throws an exception during run time, could be because the address mapping is wrong
     Init_Touch();
     Init_GPS();
 }

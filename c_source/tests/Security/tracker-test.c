@@ -3,6 +3,7 @@
 #include "../tests.h"
 
 static void test_inbound() {
+    printf("\n\n running [test_inbound]...\n");
     Bound tb;
     gps_point p;
     int result;
@@ -67,8 +68,8 @@ static void test_inbound() {
     result = inbound(&p, &tb);
     VALIDATE_INT(result, IN_BOUND);
 
-    p.lon = 240.119999;
-    p.lat = 454.999999;
+    p.lon = 240.1199;
+    p.lat = 454.9999;
     result = inbound(&p, &tb);
     VALIDATE_INT(result, IN_BOUND);
 }
