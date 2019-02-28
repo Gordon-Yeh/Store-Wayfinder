@@ -9,7 +9,6 @@
 Item ** parse_BT_items(void) {
 	char *buffer;
 	bt_receive_message(&buffer);
-	printf("received message: %s\n", buffer);
 	
 	static Item *items[10];
 	int index = 0;
@@ -22,18 +21,15 @@ Item ** parse_BT_items(void) {
 
 	/* walk through other tokens */
 	while( token != NULL ) {
-		printf( "%s\n", token);
 		// Right now, token is name
 		name = malloc(strlen(token)+1);
 		strcpy(name, token);
 		token = strtok(NULL, ",");
 		// Token is x
 		x = atoi(token);
-		printf("%d\n", x);
 		token = strtok(NULL, ",");
 		// Token is y
 		y = atoi(token);
-		printf("%d\n", y);
 		
 		items[index] = create_display_item(name, cur_category, x, y);
 		index++;

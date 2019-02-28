@@ -12,7 +12,7 @@ void app_start() {
     store_bound.max_lon = 240.12;
     store_bound.max_lat = 455.0;
 
-    // start tracking of the device with refresh rate of 1 second
-    tracker_start(store_bound, 2, TESTING);
+    // start tracking of the device with refresh rate of 10 second
+    tracker_start(store_bound, 10, TESTING);
     gui_start();
 }

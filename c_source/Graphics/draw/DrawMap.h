@@ -8,6 +8,9 @@
 #ifndef DRAWMAP_H_
 #define DRAWMAP_H_
 
+#define MAP_HEIGHT 418
+#define MAP_WIDTH 518
+
 extern const unsigned char Map[];
 
 void DrawMap(int x, int y);
