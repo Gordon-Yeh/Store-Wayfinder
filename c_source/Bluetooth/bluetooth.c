@@ -81,6 +81,7 @@ int bt_receive_message(char ** buffer_ptr) {
  
     char * buffer = malloc(buffer_size);
     buffer[0] = '\0';
+    unsigned int i = 0;
     while (1) {
         if (BT_TestForReceiveData() == 1) {
             curr_char = (char) getcharBT();
@@ -101,6 +102,11 @@ int bt_receive_message(char ** buffer_ptr) {
                     return BUFFER_OVERFLOW;
                 }
                 strncat(buffer, (char *) (&curr_char), 1);
+                i = 0;
+            }
+
+            if (++i > 50000000) {
+              return TIME_OUT;
             }
         }
     }

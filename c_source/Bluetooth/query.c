@@ -26,8 +26,10 @@ Point * query_map_position() {
     Point * p;
 
     bt_send_message(LOC_REQUEST_MESSAGE);
-    bt_receive_message(&position_str);
-    printf("query_map_position: receive: %s\n", position_str);
+    if(bt_receive_message(&position_str) == TIME_OUT) {
+        return NULL;
+    }
+    // printf("query_map_position: receive: %s\n", position_str);
     p = parse_postion_string(position_str);
     free(position_str);
 

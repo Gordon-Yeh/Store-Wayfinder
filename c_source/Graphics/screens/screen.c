@@ -12,6 +12,7 @@
 #include "antitheft_screen.h"
 
 #include "../widgets/widgets.h"
+#include "../widgets/location_plotter.h"
 
 void reset_screen() {
 	//Clear screen

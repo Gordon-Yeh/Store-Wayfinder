@@ -46,19 +46,21 @@ static void *update_location(void * args) {
     prev_p = &p;
     while (_running) {
         curr_p = query_map_position();
-        printf("current locations: (%d, %d)\n", curr_p->x, curr_p->y);
+        if (curr_p == NULL) continue;
+        // printf("current locations: (%d, %d)\n", curr_p->x, curr_p->y);
         refill_location(prev_p);
         plot_location(curr_p);
         prev_p = curr_p;
         sleep(_update_rate);
     }
-
+    refill_location(prev_p);
     pthread_exit(NULL);
 }
 
 static void plot_location(Point * p) {
     printf("printing person at (%d, %d)\n", _xoffset + p->x, _yoffset + p->y);
     if (p->x < PERSON_HALF_WIDTH || p->y < PERSON_HALF_HEIGHT) return;
+    if (p->x > MAP_WIDTH - PERSON_HALF_WIDTH || p->y > MAP_HEIGHT - PERSON_HALF_HEIGHT) return;
     Person(_xoffset, _yoffset, p->x, p->y, _colour);
 }
 
@@ -70,6 +72,7 @@ static void refill_location(Point * p) {
 }
 
 void location_plotter_end() {
+    *LEDs = *LEDs & ~(0x4);
     _running = 0;
     pthread_join(_lp_thread, NULL);
 }
