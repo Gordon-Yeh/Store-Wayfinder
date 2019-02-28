@@ -14,6 +14,7 @@ typedef struct {
 
 // constructor for item struct
 Item * create_item(char *name, char *category, int x, int y, TextBox *delete_textbox, TextBox *delete_icon);
+Item * create_display_item(char *name, char *category, int x, int y);
 
 // destructor for item struct
 void destroy_item(Item * i);
