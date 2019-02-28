@@ -1,23 +1,15 @@
 #include <stdio.h>
 #include "../Colours.h"
 #include "draw.h"
+#include "../../io/bridge.h"
 
 //NOTE: (20, 0) is top left, (799, 479) is bottom right
 // graphics register addresses
 
-#define GraphicsCommandReg   		(*(volatile unsigned short int *)(0xFF210000))
-#define GraphicsStatusReg   		(*(volatile unsigned short int *)(0xFF210000))
-#define GraphicsX1Reg   			(*(volatile unsigned short int *)(0xFF210002))
-#define GraphicsY1Reg   			(*(volatile unsigned short int *)(0xFF210004))
-#define GraphicsX2Reg   			(*(volatile unsigned short int *)(0xFF210006))
-#define GraphicsY2Reg   			(*(volatile unsigned short int *)(0xFF210008))
-#define GraphicsColourReg   		(*(volatile unsigned short int *)(0xFF21000E))
-#define GraphicsBackGroundColourReg   	(*(volatile unsigned short int *)(0xFF210010))
-
 /************************************************************************************************
 ** This macro pauses until the graphics chip status register indicates that it is idle
 ***********************************************************************************************/
-#define WAIT_FOR_GRAPHICS		while((GraphicsStatusReg & 0x0001) != 0x0001);
+#define WAIT_FOR_GRAPHICS		while((*GraphicsStatusReg & 0x0001) != 0x0001);
 
 
 // #defined constants representing values we write to the graphics 'command' register to get
@@ -42,10 +34,10 @@ void draw_pixel(int x, int y, int Colour)
 {
 	WAIT_FOR_GRAPHICS;				// is graphics ready for new command
 
-	GraphicsX1Reg = x;				// write coords to x1, y1
-	GraphicsY1Reg = y;
-	GraphicsColourReg = Colour;			// set pixel colour
-	GraphicsCommandReg = PutAPixel;			// give graphics "write pixel" command
+	*GraphicsX1Reg = x;				// write coords to x1, y1
+	*GraphicsY1Reg = y;
+	*GraphicsColourReg = Colour;			// set pixel colour
+	*GraphicsCommandReg = PutAPixel;			// give graphics "write pixel" command
 }
 
 /*********************************************************************************************
@@ -57,12 +49,12 @@ int read_pixel(int x, int y)
 {
 	WAIT_FOR_GRAPHICS;			// is graphics ready for new command
 
-	GraphicsX1Reg = x;			// write coords to x1, y1
-	GraphicsY1Reg = y;
-	GraphicsCommandReg = GetAPixel;		// give graphics a "get pixel" command
+	*GraphicsX1Reg = x;			// write coords to x1, y1
+	*GraphicsY1Reg = y;
+	*GraphicsCommandReg = GetAPixel;		// give graphics a "get pixel" command
 
 	WAIT_FOR_GRAPHICS;			// is graphics done reading pixel
-	return (int) (GraphicsColourReg);	// return the palette number (colour)
+	return (int) (*GraphicsColourReg);	// return the palette number (colour)
 }
 
 
@@ -75,10 +67,10 @@ int read_pixel(int x, int y)
 void ProgramPalette(int PaletteNumber, int RGB)
 {
     WAIT_FOR_GRAPHICS;
-    GraphicsColourReg = PaletteNumber;
-    GraphicsX1Reg = RGB >> 16;        // program red value in ls.8 bit of X1 reg
-    GraphicsY1Reg = RGB ;                // program green and blue into ls 16 bit of Y1 reg
-    GraphicsCommandReg = ProgramPaletteColour; // issue command
+    *GraphicsColourReg = PaletteNumber;
+    *GraphicsX1Reg = RGB >> 16;        // program red value in ls.8 bit of X1 reg
+    *GraphicsY1Reg = RGB ;                // program green and blue into ls 16 bit of Y1 reg
+    *GraphicsCommandReg = ProgramPaletteColour; // issue command
 }
 
 /********************************************************************************************* This function draw a horizontal line, 1 pixel at a time starting at the x,y coords specified
@@ -88,11 +80,11 @@ void draw_h_line(int x1, int y1, int x2, int Colour)
 {
 	WAIT_FOR_GRAPHICS;
 
-	GraphicsX1Reg = x1;
-	GraphicsY1Reg = y1;
-	GraphicsX2Reg = x2;			
-	GraphicsColourReg = Colour;
-	GraphicsCommandReg = DRAW_H_LINE;
+	*GraphicsX1Reg = x1;
+	*GraphicsY1Reg = y1;
+	*GraphicsX2Reg = x2;			
+	*GraphicsColourReg = Colour;
+	*GraphicsCommandReg = DRAW_H_LINE;
 }
 
 /********************************************************************************************* This function draw a vertical line, 1 pixel at a time starting at the x,y coords specified
@@ -102,11 +94,11 @@ void draw_v_line(int x1, int y1, int y2, int Colour)
 {
 	WAIT_FOR_GRAPHICS;
 
-	GraphicsX1Reg = x1;
-	GraphicsY1Reg = y1;
-	GraphicsY2Reg = y2;
-	GraphicsColourReg = Colour;
-	GraphicsCommandReg = DRAW_V_LINE;
+	*GraphicsX1Reg = x1;
+	*GraphicsY1Reg = y1;
+	*GraphicsY2Reg = y2;
+	*GraphicsColourReg = Colour;
+	*GraphicsCommandReg = DRAW_V_LINE;
 }
 
 /*******************************************************************************
@@ -116,12 +108,12 @@ void draw_line(int x1, int y1, int x2, int y2, int Colour)
 {
 	WAIT_FOR_GRAPHICS;
 
-	GraphicsX1Reg = x1;
-	GraphicsX2Reg = x2;
-	GraphicsY1Reg = y1;
-	GraphicsY2Reg = y2;
-	GraphicsColourReg = Colour;
-	GraphicsCommandReg = DRAW_LINE;
+	*GraphicsX1Reg = x1;
+	*GraphicsX2Reg = x2;
+	*GraphicsY1Reg = y1;
+	*GraphicsY2Reg = y2;
+	*GraphicsColourReg = Colour;
+	*GraphicsCommandReg = DRAW_LINE;
 }
 
 /*******************************************************************************
@@ -131,8 +123,8 @@ void clear(int Colour)
 {
 	WAIT_FOR_GRAPHICS;
 
-	GraphicsColourReg = Colour;
-	GraphicsCommandReg = CLEAR_SCREEN;
+	*GraphicsColourReg = Colour;
+	*GraphicsCommandReg = CLEAR_SCREEN;
 }
 
 /*******************************************************************************
@@ -143,12 +135,12 @@ void fill_square(int x1, int x2, int y1, int y2, int Colour)
 {
 	WAIT_FOR_GRAPHICS;
 
-	GraphicsX1Reg = x1;
-	GraphicsX2Reg = x2;
-	GraphicsY1Reg = y1;
-	GraphicsY2Reg = y2;	
-	GraphicsColourReg = Colour;
-	GraphicsCommandReg = FILL;
+	*GraphicsX1Reg = x1;
+	*GraphicsX2Reg = x2;
+	*GraphicsY1Reg = y1;
+	*GraphicsY2Reg = y2;	
+	*GraphicsColourReg = Colour;
+	*GraphicsCommandReg = FILL;
 }
 
 /*********************************************************************************************

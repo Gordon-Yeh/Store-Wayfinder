@@ -10,19 +10,7 @@
 #include <string.h>
 
 #include "Wifi.h"
-
-#define Wifi_ReceiverFifo (*(volatile unsigned char *)(0xFF210240))
-#define Wifi_TransmitterFifo (*(volatile unsigned char *)(0xFF210240))
-#define Wifi_InterruptEnableReg (*(volatile unsigned char *)(0xFF210242))
-#define Wifi_InterruptIdentificationReg (*(volatile unsigned char *)(0xFF210244))
-#define Wifi_FifoControlReg (*(volatile unsigned char *)(0xFF210244))
-#define Wifi_LineControlReg (*(volatile unsigned char *)(0xFF210246))
-#define Wifi_ModemControlReg (*(volatile unsigned char *)(0xFF210248))
-#define Wifi_LineStatusReg (*(volatile unsigned char *)(0xFF21024A))
-#define Wifi_ModemStatusReg (*(volatile unsigned char *)(0xFF21024C))
-#define Wifi_ScratchReg (*(volatile unsigned char *)(0xFF21024E))
-#define Wifi_DivisorLatchLSB (*(volatile unsigned char *)(0xFF210240))
-#define Wifi_DivisorLatchMSB (*(volatile unsigned char *)(0xFF210242))
+#include "../io/bridge.h"
 
 /*
  * Puts character into Transmitter Fifo so it can be read by wifi module
@@ -30,8 +18,8 @@
 char putcharWifi(char input)
 {
  // wait for Transmitter Holding Register bit (5) of line status register to be '1'
-    while (!(Wifi_LineStatusReg && 0x20));
-    Wifi_TransmitterFifo = input;
+    while (!(*Wifi_LineStatusReg && 0x20));
+    *Wifi_TransmitterFifo = input;
     return input;
 }
 
@@ -41,8 +29,8 @@ char putcharWifi(char input)
 unsigned char getcharWifi( void )
 {
  // wait for Data Ready bit (0) of line status register to be '1'
-    while (!(Wifi_LineStatusReg & 0x1));
-    return Wifi_ReceiverFifo;
+    while (!(*Wifi_LineStatusReg & 0x1));
+    return *Wifi_ReceiverFifo;
 }
 
 /*
@@ -52,8 +40,8 @@ unsigned char getcharWifi( void )
  */
 int WifiTestForReceivedData(void)
 {
- // if Wifi_LineStatusReg bit 0 is set to 1
-    if (Wifi_LineStatusReg & 0x1){
+ // if *Wifi_LineStatusReg bit 0 is set to 1
+    if (*Wifi_LineStatusReg & 0x1){
         return 1;
     }
  //return TRUE, otherwise return FALSE
@@ -82,7 +70,6 @@ void delay(double number_of_seconds)
  */
 void WifiSendLine(char* message){
 	for(int i = 0; i < strlen(message); i ++){
-			char c = putcharWifi(message[i]);
 			delay(0.01);
 	}
 }
@@ -94,8 +81,8 @@ void saveBuffer(void)
 {
 	 char Buffer[100];
 	 int i = 0;
-	 while (Wifi_LineStatusReg & 0x1){
-	        Buffer[i] = Wifi_ReceiverFifo;
+	 while (*Wifi_LineStatusReg & 0x1){
+	        Buffer[i] = *Wifi_ReceiverFifo;
 	        i++;
 	 }
 
@@ -107,9 +94,9 @@ void saveBuffer(void)
  */
 void WifiFlush(void)
 {
- // while bit 0 of Line Status Register == ‘1’
-    while (Wifi_LineStatusReg & 0x1){
-        Wifi_ReceiverFifo;
+ // while bit 0 of Line Status Register == ï¿½1ï¿½
+    while (*Wifi_LineStatusReg & 0x1){
+        *Wifi_ReceiverFifo;
     }
     return;
 }
@@ -120,21 +107,21 @@ void WifiFlush(void)
 void Init_Wifi(void)
 {
 	//set bit 7 of Line Control Register to 1, to gain access to the baud rate registers
-	  Wifi_LineControlReg = 0x80;
+	  *Wifi_LineControlReg = 0x80;
 	//set Divisor latch (LSB and RSB) with correct value for required baud rate
-	  Wifi_DivisorLatchLSB = 0x1B;
-	  Wifi_DivisorLatchMSB = 0;
+	  *Wifi_DivisorLatchLSB = 0x1B;
+	  *Wifi_DivisorLatchMSB = 0;
 
 	//set bit 7 of Line Control Register back to 0 and
-	  Wifi_LineControlReg = Wifi_LineControlReg & 0x7F;
+	  *Wifi_LineControlReg = *Wifi_LineControlReg & 0x7F;
 	//program other bits in that reg for 8 bit data, 1, stop bit, no parity etc
-	  Wifi_LineControlReg = 0x3;
+	  *Wifi_LineControlReg = 0x3;
 
 	//Reset the Fifo's in the FiFo Control Reg by setting bits 1 & 2
-	  Wifi_FifoControlReg = 0x6;
+	  *Wifi_FifoControlReg = 0x6;
 
 	//Now clear all bits in the FiFo control registers
-	  Wifi_FifoControlReg = 0;
+	  *Wifi_FifoControlReg = 0;
 
 	  //connect to wifi
 	  char EndLine[2] = "\r\n" ;
