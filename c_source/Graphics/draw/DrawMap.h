@@ -11,5 +11,6 @@
 extern const unsigned char Map[];
 
 void DrawMap(int x, int y);
+void DrawMapSection(int screenx, int screeny, int mapx, int mapy);
 
 #endif /* DRAWMAP_H_ */

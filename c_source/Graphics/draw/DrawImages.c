@@ -66,3 +66,22 @@ void Circle(int centre_x, int centre_y, int colour){
 		}
 	}
 }
+
+/*
+ * draws a person on the map
+ * screenx, screeny: top left corner of map -- set to 0 if not drawn on map
+ * x, y: center of person on the map (not dependent on location of map on screen)
+ */
+void Person(int screenx, int screeny, int x, int y, int colour){
+	int row, column, pixel;
+	int i = 0;
+
+	for(row = 0; row < 25; row ++)	{							   											// set of hex 200 i.e. bit 7-0 = 0010 0000 0000
+		for(column = 0; column < 18; column++) {
+			pixel = Walking_Person[i] ;
+			if(pixel == 1)
+				draw_pixel(screenx+x-9+column, screeny+y-12+row, colour) ;
+			i++;
+		}
+	}
+}

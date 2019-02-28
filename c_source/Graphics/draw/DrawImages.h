@@ -15,5 +15,6 @@ extern const unsigned char Small_Circle[];
 void NextArrow(int x, int y, int colour);
 void BackArrow(int x, int y, int colour);
 void Circle(int centre_x, int centre_y, int colour);
+void Person(int screenx, int screeny, int x, int y, int colour);
 
 #endif /* DRAWIMAGES_H_ */

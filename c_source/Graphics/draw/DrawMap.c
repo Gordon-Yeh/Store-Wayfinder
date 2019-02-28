@@ -36,3 +36,34 @@ void DrawMap(int x, int y){
 	}
 }
 
+/*
+ * Draws a map section of the size of the person symbol
+ * screenx, screeny: upper left corner of map if it were drawn in full
+ * mapx, mapy: center of map section being drawn (relative to map coordinates - not dependent on
+ * 		positioning of map on screen)
+ */
+void DrawMapSection(int screenx, int screeny, int mapx, int mapy){
+	int row, column;
+	unsigned char colour;
+	int i = (mapy-12)*518+mapx-9; //person 18x25
+
+	if(((short)(screenx) > (short)(XRES-1)) || ((short)(screeny) > (short)(YRES-1)))  // if start off edge of screen don't bother
+		return ;
+
+	for(row = mapy-12; row < mapy+13 ; row ++)	{							   											// set of hex 200 i.e. bit 7-0 = 0010 0000 0000
+		for(column = mapx-9; column < mapx+9; column++) {
+			colour = Map[i] ;
+			if(colour == 10)
+				draw_pixel(screenx+column, screeny+row, GRAY) ;
+			if(colour == 30)
+				draw_pixel(screenx+column, screeny+row, ORANGE) ;
+			if(colour == 0)
+				draw_pixel(screenx+column, screeny+row, BLACK) ;
+			if(colour == 1)
+				draw_pixel(screenx+column, screeny+row, WHITE) ;
+			i++;
+		}
+		i = i+500;
+	}
+}
+
