@@ -64,11 +64,11 @@ void screen_draw(screen_t screen) {
 			help_screen_draw();
 		} break;
 
-		case THIEF: {  //TODO: should draw the screen after it's implemented 
+		case THIEF: { 
 			reset_screen();
+			antitheft_screen_draw();
 		} break;
 		
-        // TODO: add more screens
         default: {
 			reset_screen(); 
 			homescreen_draw(); 

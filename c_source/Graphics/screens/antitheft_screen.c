@@ -2,24 +2,33 @@
 #include "../../Security/tracker.h"
 #include "screen.h"
 #include "antitheft_screen.h"
+#include "../components/textbox.h"
+#include "../Colours.h"
+#include "../Text.h"
+
+static struct {
+    TextBox * box;
+} _ANTITHEFT_SCREEN;
 
 /**
  * initalize antitheft_screen
  * needs to be called before any other antitheft_screen functions
  */
 void antitheft_screen_init(void) {
-    // TODO: add components
+    _ANTITHEFT_SCREEN.box = textbox_create(0, SCREEN_X_MAX, 0, SCREEN_Y_MAX);
+    textbox_set_text(_ANTITHEFT_SCREEN.box, "STEALING IS BAD", FONT3, BLACK);
+    textbox_set_box_colour(_ANTITHEFT_SCREEN.box, BLACK, WHITE);
 }
 
 void antitheft_screen_destroy(void) {
-    // TODO:
+    textbox_destroy(_ANTITHEFT_SCREEN.box);
 }
 
 /**
  *  draw the antitheft_screen on the map
  */
 void antitheft_screen_draw(void) {
-    // TODO:
+    textbox_draw(_ANTITHEFT_SCREEN.box);
 }
 
 /**
